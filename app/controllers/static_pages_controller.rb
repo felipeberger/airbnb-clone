@@ -12,4 +12,8 @@ class StaticPagesController < ApplicationController
     render 'login'
   end
 
+  def landing
+    render 'landing'
+  end
+
 end
