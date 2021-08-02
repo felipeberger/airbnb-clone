@@ -1,0 +1,28 @@
+.background {
+   background-image: url('./pictures/fransiskus-filbert-mangundap-l8OKlH71Xh0-unsplash.jpg');
+   background-attachment: fixed;
+   background-repeat: no-repeat;
+   min-height: 87vh;
+   background-size: cover;
+}
+
+#search-icon {
+   display: flex;
+}
+
+.searchbar {
+   font-weight: bold;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+/* Firefox */
+input[type=number] {
+   -moz-appearance: textfield;
+ }

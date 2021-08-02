@@ -1,8 +1,7 @@
 // layout.js
 import React, {useState, useEffect} from 'react';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 import LoginWidget from './login/loginWidget';
-
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 const loggedIn = () => {
   return (
