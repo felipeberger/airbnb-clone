@@ -21,8 +21,18 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-
 /* Firefox */
 input[type=number] {
    -moz-appearance: textfield;
- }
+}
+
+.DateInput_input {
+   padding: 0px;
+   font-size: 1rem;
+   color: #212529;
+   border: none;
+}
+
+.SingleDatePickerInput__withBorder {
+   border: none;
+}
