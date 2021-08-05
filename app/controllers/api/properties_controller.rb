@@ -13,5 +13,13 @@ module Api
   
         render 'api/properties/show', status: :ok
       end
+
+      def get_properties_by_location
+        property = Property.find_by(city: params[:city])
+        return render json: { error: 'No properties found in that location'}, status: :not_found if !property
+
+        @propertiesByLocation = Property.where("city = ? ", params[:city])
+        render 'api/properties/bylocation', status: :ok
+      end
     end
   end
