@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import { useHistory } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import 'react-dates/initialize';
 import { SingleDatePicker } from 'react-dates';
@@ -20,8 +19,6 @@ export default function Landing () {
     const [location, setLocation ] = useState(null);
     const [guests, setGuests ] = useState(0);
     const [searchResults, setSearchResults] = useState(null);
-    let history = useHistory();
-
   
     useEffect( () => {
       fetch('/api/authenticated')
@@ -32,19 +29,14 @@ export default function Landing () {
       }, [authenticated]
     )
 
-      useEffect( ()=>{
-          history.push('/')
-      }, [searchResults]
-      )
-
     const submitSearch = (e) => {
         // if (e) {e.preventDefault()}
         
-        fetch('/api/properties/' + location + '/search' )
+        fetch(`/api/properties/${location}/search`)
             .then(handleErrors)
             .then(data => {
-                setSearchResults(data)
-                // history.push('/')
+                console.log(data)
+                window.location = `/properties/${location}/${startDate}/${endDate}/${guests}?page=1`
             })
         console.log(
             "Start date: ", startDate, 
