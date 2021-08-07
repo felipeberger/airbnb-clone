@@ -1,5 +1,6 @@
 class StaticPagesController < ApplicationController
   def home
+    @data = { city: params[:city], startDate: params[:start], endDate: params[:end], guest: params[:guests] }.to_json
     render 'home'
   end
 

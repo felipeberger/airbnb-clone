@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get '/property/:id' => 'static_pages#property'
   get '/login' => 'static_pages#login'
   get '/landing' => 'static_pages#landing'
+  get '/properties/:city/:start/:end/:guests' => 'static_pages#home'
 
   namespace :api do
     # Add routes below this line
