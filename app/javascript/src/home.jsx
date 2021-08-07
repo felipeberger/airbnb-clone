@@ -13,9 +13,10 @@ function Home (props) {
   const [loading, setLoading ] = useState(true);
 
   useEffect( ()=>{
-    fetch(`/api/properties/Brooklyn/search`)
+    fetch(`/api/properties/${props.data.city}/search`)
       .then(handleErrors)
       .then(data => {
+        console.log(data)
         setProperties(data.propertiesByLocation)
         setTotalPages(data.total_pages)
         setNextPage(data.next_page)
@@ -32,10 +33,10 @@ function Home (props) {
     }
 
     setLoading(true);
-    fetch(`/api/properties?page=${next_page}`)
+    fetch(`/api/properties/${props.data.city}/search?page=${next_page}`)
       .then(handleErrors)
       .then(data => {
-        setProperties(properties.concat(data.properties))
+        setProperties(properties.concat(data.propertiesByLocation))
         setTotalPages(data.total_pages)
         setNextPage(data.next_page)
         setLoading(false)
