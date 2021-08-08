@@ -15,10 +15,11 @@ module Api
       end
 
       def get_properties_by_location
-        city = params[:city].titleize 
-        property = Property.find_by(city: city)
+        @city = params[:city].titleize 
+        property = Property.find_by(city: @city)
         return render json: { error: 'No properties found in that location'}, status: :not_found if !property
-        @propertiesByLocation = Property.where("city = ? ", city).order(created_at: :desc).page(params[:page]).per(6)
+        # @propertiesByLocation = Property.where("city = ? ", city).order(created_at: :desc).page(params[:page]).per(6)
+        @propertiesByLocation = Property.where("city = ? AND max_guests >= ?", @city, params[:guests]).order(created_at: :desc).page(params[:page]).per(6)
         
         render 'api/properties/bylocation', status: :ok
       end

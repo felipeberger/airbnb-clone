@@ -29,21 +29,12 @@ export default function Landing () {
       }, [authenticated]
     )
 
-    const submitSearch = (e) => {
-        // if (e) {e.preventDefault()}
-        
-        fetch(`/api/properties/${location}/search`)
+    const submitSearch = (e) => {       
+        fetch(`/api/properties/${location}/${guests}/search`)
             .then(handleErrors)
             .then(data => {
-                console.log(data)
                 window.location = `/properties/${location}/${startDate}/${endDate}/${guests}?page=1`
             })
-        console.log(
-            "Start date: ", startDate, 
-            "End date: ", endDate,
-            "Location ", location,
-            "Guests ", guests
-        )
     }
 
     const changeLocation = (e) => {

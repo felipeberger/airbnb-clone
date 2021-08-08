@@ -11,9 +11,11 @@ function Home (props) {
   const [total_pages, setTotalPages] = useState(null);
   const [next_page, setNextPage ] = useState(null);
   const [loading, setLoading ] = useState(true);
+  const [locationText, setLocationText] = useState("Showing all properties");
 
   useEffect( ()=>{
-    fetch(`/api/properties/${props.data.city}/search`)
+
+    fetch(`/api/properties/${props.data.city}/${props.data.guests}/search`)
       .then(handleErrors)
       .then(data => {
         console.log(data)
@@ -21,6 +23,7 @@ function Home (props) {
         setTotalPages(data.total_pages)
         setNextPage(data.next_page)
         setLoading(false)
+        setLocationText(`Properties found in ${data.city}`)
       })
   }, [total_pages])
 
@@ -33,7 +36,7 @@ function Home (props) {
     }
 
     setLoading(true);
-    fetch(`/api/properties/${props.data.city}/search?page=${next_page}`)
+    fetch(`/api/properties/${props.data.city}/${props.data.guests}/search?page=${next_page}`)
       .then(handleErrors)
       .then(data => {
         setProperties(properties.concat(data.propertiesByLocation))
@@ -47,7 +50,7 @@ function Home (props) {
 
     <Layout>
       <div className="container pt-4">
-        <h4 className="mb-1">Top-rated places to stay</h4>
+        <h4 className="mb-1">{locationText}</h4>
         <p className="text-secondary mb-3">Explore some of the best-reviewed stays in the world</p>
         <div className="row">
           {properties.map(property => {

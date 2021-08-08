@@ -1,5 +1,6 @@
 json.total_pages @propertiesByLocation.total_pages
 json.next_page @propertiesByLocation.next_page
+json.city @city
 
 json.propertiesByLocation do
     json.array! @propertiesByLocation do |property|
