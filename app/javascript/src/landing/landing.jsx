@@ -13,12 +13,13 @@ import { data } from 'jquery';
 export default function Landing () {
     const [authenticated, setAuthenticated ] = useState(null);
     const [startDate, setStartDate ] = useState(null);
+    const [pickerStartDate, setPickerStart ] = useState(null);
     const [endDate, setEndDate ] = useState(null);
+    const [pickerEndDate, setPickerEnd ] = useState(null);
     const [focusedStart, setStartFocus ] = useState(false);
     const [focusedEnd, setEndFocus ] = useState(false);
     const [location, setLocation ] = useState(null);
     const [guests, setGuests ] = useState(0);
-    const [searchResults, setSearchResults] = useState(null);
   
     useEffect( () => {
       fetch('/api/authenticated')
@@ -30,7 +31,7 @@ export default function Landing () {
     )
 
     const submitSearch = (e) => {       
-        fetch(`/api/properties/${location}/${guests}/search`)
+        fetch(`/api/properties/${location}/${startDate}/${endDate}/${guests}/search`)
             .then(handleErrors)
             .then(data => {
                 window.location = `/properties/${location}/${startDate}/${endDate}/${guests}?page=1`
@@ -45,6 +46,18 @@ export default function Landing () {
         setGuests(e.target.value);
     }
 
+    const formatStartDate = (e) =>{
+        let tempStart = new Date(e).toISOString().split('T')[0]        
+        setStartDate(tempStart)
+        setPickerStart(e)
+    }
+
+    const formatEndDate = (e) =>{
+        let tempEnd = new Date(e).toISOString().split('T')[0]        
+        setEndDate(tempEnd)
+        setPickerEnd(e)
+    }
+
     return (
         <Layout isLoggedIn={authenticated}>
             <div className="background">
@@ -57,21 +70,21 @@ export default function Landing () {
                                 <p className="mb-1">Location</p>
                                 <input type="text" className="border-0 col-12 pl-0" placeholder="Add location" onChange={changeLocation} />
                             </div>
-                            <div className="col-3 border-right my-2">
+                            <div className="col-3 border-right my-2 start-date">
                                 <p className="mb-1">Check in</p>
                                 <SingleDatePicker
-                                    date={startDate} // momentPropTypes.momentObj or null
-                                    onDateChange={date => setStartDate(date)} // PropTypes.func.isRequired
+                                    date={pickerStartDate} // momentPropTypes.momentObj or null
+                                    onDateChange={date => formatStartDate(date)} // PropTypes.func.isRequired
                                     focused={focusedStart.focused} // PropTypes.bool
                                     onFocusChange={({ focused }) => setStartFocus({ focused })} // PropTypes.func.isRequired
                                     id="start_date" // PropTypes.string.isRequired,
                                 />
                             </div>
-                            <div className="col-3 border-right my-2">
+                            <div className="col-3 border-right my-2 end-date">
                                 <p className="mb-1">Check out</p>                           
                                 <SingleDatePicker
-                                    date={endDate} // momentPropTypes.momentObj or null
-                                    onDateChange={date => setEndDate(date)} // PropTypes.func.isRequired
+                                    date={pickerEndDate} // momentPropTypes.momentObj or null
+                                    onDateChange={date => formatEndDate(date)} // PropTypes.func.isRequired
                                     focused={focusedEnd.focused} // PropTypes.bool
                                     onFocusChange={({ focused }) => setEndFocus({ focused })} // PropTypes.func.isRequired
                                     id="end_date" // PropTypes.string.isRequired,

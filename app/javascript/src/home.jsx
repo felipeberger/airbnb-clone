@@ -15,7 +15,7 @@ function Home (props) {
 
   useEffect( ()=>{
 
-    fetch(`/api/properties/${props.data.city}/${props.data.guests}/search`)
+    fetch(`/api/properties/${props.data.city}/${props.data.startDate}/${props.data.endDate}/${props.data.guests}/search`)
       .then(handleErrors)
       .then(data => {
         console.log(data)
