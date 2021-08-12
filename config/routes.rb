@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get '/properties/:id/bookings' => 'bookings#get_property_bookings'
     get '/authenticated' => 'sessions#authenticated'
     get '/properties/:city/:start_date/:end_date/:guests/search' => 'properties#get_properties_by_location'
+    get '/properties/:city/check' => 'properties#check_city'
     # stripe webhook
     post '/charges/mark_complete' => 'charges#mark_complete'
 

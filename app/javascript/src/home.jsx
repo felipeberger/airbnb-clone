@@ -36,7 +36,7 @@ function Home (props) {
     }
 
     setLoading(true);
-    fetch(`/api/properties/${props.data.city}/${props.data.guests}/search?page=${next_page}`)
+    fetch(`/api/properties/${props.data.city}/${props.data.startDate}/${props.data.endDate}/${props.data.guests}/search?page=${next_page}`)
       .then(handleErrors)
       .then(data => {
         setProperties(properties.concat(data.propertiesByLocation))

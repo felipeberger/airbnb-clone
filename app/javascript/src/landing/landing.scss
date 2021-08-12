@@ -10,7 +10,7 @@
    display: flex;
 }
 
-.searchbar {
+.search-text {
    font-weight: bold;
 }
 
@@ -36,3 +36,20 @@ input[type=number] {
 .SingleDatePickerInput__withBorder {
    border: none;
 }
+
+.search-popup {
+   font-size: 10px;
+   margin-left: -15px;
+   transition: opacity 0.5s;
+   opacity: 1;
+}
+
+.search-popup > p {
+   margin-bottom: 3px;
+}
+
+ul, li {
+   margin-left: 3px;
+   padding-left: 3px;
+}
+
