@@ -8,6 +8,7 @@ import { safeCredentials, handleErrors } from '@utils/fetchHelper';
 import './login.scss';
 
 export default function Login () {
+  
   const [authenticated, setAuthenticated ] = useState(false);
   const [show_login, setShowLogin] = useState(true);
 
@@ -17,7 +18,7 @@ export default function Login () {
       .then(data => {
         setAuthenticated(data.authenticated)
       })
-    }
+    }, [authenticated]
   )
 
   const toggle = () => {

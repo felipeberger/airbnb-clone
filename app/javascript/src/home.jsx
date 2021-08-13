@@ -7,14 +7,23 @@ import './home.scss';
 
 function Home (props) {
 
+  const [authenticated, setAuthenticated ] = useState(false);
   const [properties, setProperties] = useState([]);
   const [total_pages, setTotalPages] = useState(null);
   const [next_page, setNextPage ] = useState(null);
   const [loading, setLoading ] = useState(true);
   const [locationText, setLocationText] = useState("Showing all properties");
 
-  useEffect( ()=>{
+  useEffect( () => {
+    fetch('/api/authenticated')
+      .then(handleErrors)
+      .then(data => {
+        setAuthenticated(data.authenticated)
+      })
+    }, [authenticated]
+  )
 
+  useEffect( ()=>{
     fetch(`/api/properties/${props.data.city}/${props.data.startDate}/${props.data.endDate}/${props.data.guests}/search`)
       .then(handleErrors)
       .then(data => {
@@ -48,7 +57,7 @@ function Home (props) {
 
   return (
 
-    <Layout>
+    <Layout isLoggedIn={authenticated}>
       <div className="container pt-4">
         <h4 className="mb-1">{locationText}</h4>
         <p className="text-secondary mb-3">Explore some of the best-reviewed stays in the world</p>

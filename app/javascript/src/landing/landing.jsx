@@ -29,10 +29,10 @@ export default function Landing () {
       }, [authenticated]
     )
 
-    const submitSearch = (e) => {       
+    const submitSearch = (e) => {
         fetch(`/api/properties/${location}/check`)
             .then( (data) => {
-                if (data.ok == false) {
+                if (!data.ok) {
                     setSearchHelp(true)
                 } else {
                     window.location = `/properties/${location}/${startDate}/${endDate}/${guests}?page=1`
@@ -42,6 +42,7 @@ export default function Landing () {
 
     const changeLocation = (e) => {
         setLocation(e.target.value);
+        setSearchHelp(false);
     }
 
     const changeGuests = (e) => {
@@ -72,7 +73,7 @@ export default function Landing () {
                             <div className="col-1 my-1"></div> 
                             <div className="col-2 border-right my-2">
                                 <p className="mb-1 search-text">Location</p>
-                                <input type="text" className="border-0 col-12 pl-0" placeholder="Add location" onChange={changeLocation} />
+                                <input type="text" className="border-0 col-12 pl-0" placeholder="Add location" id="location-input" onChange={changeLocation} />
                                 {searchHelp ? changeVisibility():null}
                             </div>
                             <div className="col-3 border-right my-2 start-date">
