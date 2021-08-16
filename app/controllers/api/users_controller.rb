@@ -10,6 +10,17 @@ module Api
       end
     end
 
+    def get_user_bookings
+      @user = User.find_by(username: params[:username])
+
+      if @user 
+        render 'api/users/get_user_bookings', status: :ok
+      else
+        render json: { success: false }, status: :bad_request
+      end
+
+    end
+
     private
 
     def user_params
