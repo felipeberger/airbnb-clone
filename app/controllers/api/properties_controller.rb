@@ -47,5 +47,16 @@ module Api
         return render json: { sucess: 'Properties found in that location'}, status: :ok if cityHasProperties
       end
 
+      def get_properties_by_id
+        puts params[:arrayOfId].split(",").map(&:to_i)
+        arrayOfId = params[:arrayOfId].split(",").map(&:to_i)
+        @propertiesById = Property.where({id: arrayOfId})
+
+        puts @propertiesById
+        return render json: { error: 'not_found' }, status: :not_found if !@propertiesById
+
+        render 'api/properties/byId', status: :ok
+      end
+
     end
   end
