@@ -15,10 +15,17 @@ export default function Success (props) {
             setAuthenticated(data.authenticated)
             setUsername(data.username)
           })
-        }, [authenticated]
-    )
+        }, [authenticated])
 
-    
+    useEffect( () =>{
+        fetch(`/api/properties/show?id=${props.data.id}`)
+          .then(handleErrors)
+          .then(data => {
+            setProperty(data)
+          })
+    }, [property])
+
+
 
     return (
         <Layout isLoggedIn={authenticated}>
