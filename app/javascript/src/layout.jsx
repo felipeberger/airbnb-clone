@@ -8,7 +8,7 @@ const loggedIn = () => {
     <>
     <a className="dropdown-item" href="">Messages</a>
     <a className="dropdown-item" href="">Notifications</a>
-    <a className="dropdown-item" href="">Trips</a>
+    <a className="dropdown-item" href="/trips">Trips</a>
     <div className="dropdown-divider"></div>
     <a className="dropdown-item" href="">Manage Listings</a>
     <a className="dropdown-item" href="">Host an Experience</a>

@@ -27,7 +27,6 @@ function Home (props) {
     fetch(`/api/properties/${props.data.city}/${props.data.startDate}/${props.data.endDate}/${props.data.guests}/search`)
       .then(handleErrors)
       .then(data => {
-        console.log(data)
         setProperties(data.propertiesByLocation)
         setTotalPages(data.total_pages)
         setNextPage(data.next_page)
@@ -94,7 +93,6 @@ function Home (props) {
 document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('params');
   const data = JSON.parse(node.getAttribute('data-params'));
-  console.log(data);
 
   ReactDOM.render(
     <Home data={data} />,
