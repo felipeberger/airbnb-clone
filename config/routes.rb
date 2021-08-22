@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/properties/:city/:start/:end/:guests' => 'static_pages#home'
   get '/trips' => 'static_pages#trips'
   get '/booking/:id/success' => 'static_pages#success'
+  get '/hosting' => 'static_pages#hosting'
 
   namespace :api do
     # Add routes below this line

@@ -33,4 +33,8 @@ class StaticPagesController < ApplicationController
     render 'success'
   end
 
+  def hosting
+    render 'hosting'
+  end
+
 end
