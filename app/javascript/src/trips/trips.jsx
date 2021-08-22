@@ -44,11 +44,9 @@ export default function Trips () {
             fetch(`api/properties/${propertiesIds}/search`)
                 .then(handleErrors)
                 .then(data => {
-                    console.log(data)
                     setProperties(data.propertiesById)
                 })
         }
-
     }, [bookings])
 
     const displayBookings = (bool) => {
