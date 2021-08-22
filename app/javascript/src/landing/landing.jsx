@@ -66,6 +66,7 @@ export default function Landing () {
     return (
         <Layout isLoggedIn={authenticated}>
             <div className="background">
+                <div className="container-fluid">
                 <div className="row d-flex justify-content-center">
                     <div className="col-8 mt-5">
 
@@ -108,6 +109,8 @@ export default function Landing () {
                         </div>  
 
                     </div>
+                </div>
+
                 </div>
             </div>
         </Layout>

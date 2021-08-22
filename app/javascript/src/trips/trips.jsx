@@ -79,7 +79,7 @@ export default function Trips () {
 
     const bookingBuilder = (i, bookingsArray) => {
         bookingsArray.push(
-            <div key={bookings[i].id} className="card mx-2 my-2" style={{width: "16rem"}}>
+            <div key={bookings[i].id} className="card mx-3 my-2" style={{width: "16rem"}}>
                 <img className="card-img-top" src={properties[i].image_url} alt="Property picture" /> 
                 <div className="card-body">
                 <h5 className="card-title"> <b>{properties[i].title}</b> </h5>
@@ -101,11 +101,11 @@ export default function Trips () {
 
 return (
     <Layout isLoggedIn={authenticated}>
+        <div className="container-fluid">
             <div className="py-3">
                 <h2>Trips</h2>
             </div>
             <div>
-                {/* TODO add style so bottom border of selected className will show bold */}
                 <button id="upcoming" className={upcoming? "btn btn-danger" : "btn" } onClick={toggleActive}>Upcoming</button>
                 <button id="past" className={upcoming? "btn": "btn btn-danger"} onClick={toggleActive}>Past</button>
                 <hr className="mt-0" />
@@ -117,7 +117,8 @@ return (
             <div>
                 <a href="/" className="btn btn-danger btn-lg" role="button" >Explore AirBnB</a>
             </div>
-            <hr />
+        </div>
+        <hr />
         </Layout> 
     )
 }
