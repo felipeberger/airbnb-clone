@@ -80,14 +80,14 @@ export default function Trips () {
     const bookingBuilder = (i, bookingsArray) => {
         bookingsArray.push(
             <div key={bookings[i].id} className="card mx-3 my-2" style={{width: "16rem"}}>
-                <img className="card-img-top" src={properties[i].image_url} alt="Property picture" /> 
-                <div className="card-body">
-                <h5 className="card-title"> <b>{properties[i].title}</b> </h5>
-                <p className="card-text">{properties[i].city}</p>
-                <p className="card-text">Checking in on <b>{bookings[i].start_date}</b></p>
-                <a href={`/property/${bookings[i].property_id}`} className="btn btn-secondary btn-sm" role="button" >See Property Details</a>
+                    <img className="card-img-top" src={properties[i].image_url} alt="Property picture" /> 
+                    <div className="card-body">
+                        <h5 className="card-title"> <b>{properties[i].title}</b> </h5>
+                        <p className="card-text">{properties[i].city}</p>
+                        <p className="card-text">Checking in on <b>{bookings[i].start_date}</b></p>
+                        <a href={`/property/${bookings[i].property_id}`} className="btn btn-secondary btn-sm" role="button" >See Property Details</a>
+                    </div>
                 </div>
-            </div>
         )
     }
 
