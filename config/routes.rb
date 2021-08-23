@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     
     # Users
     get '/users/:username/bookings' => 'users#get_user_bookings'
+    get '/users/:username/properties' => 'users#get_user_properties'
 
     # Sessions
     get '/authenticated' => 'sessions#authenticated'
