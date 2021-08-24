@@ -33,7 +33,7 @@ module Api
 
         render 'api/bookings/get_property_by_booking'
       end
-  
+
       private
   
       def booking_params
