@@ -34,7 +34,28 @@ class StaticPagesController < ApplicationController
   end
 
   def hosting
-    render 'hosting'
+    token = cookies.signed[:airbnb_session_token]
+    session = Session.find_by(token: token)
+
+    if session
+      render 'hosting'
+    else 
+      redirect_to '/login'
+    end
+
+  end
+
+  def listing
+    token = cookies.signed[:airbnb_session_token]
+    session = Session.find_by(token: token)
+    
+    if session
+      @data = { property_id: params[:id] }.to_json
+      render 'listing'
+    else 
+      redirect_to '/login'
+    end
+
   end
 
 end
