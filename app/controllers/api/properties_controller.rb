@@ -16,8 +16,8 @@ module Api
 
       def get_properties_by_location
         @city = params[:city].titleize 
-        startDate = Date.parse(params[:start_date])
-        endDate = Date.parse(params[:end_date])
+        startDate = params[:start_date] == "null"? Date.today : Date.parse(params[:start_date])
+        endDate = params[:end_date] == "null"? Date.today.next_year(2) : Date.parse(params[:end_date])
         matchingIds = []
 
         propertyExists = Property.find_by(city: @city)
