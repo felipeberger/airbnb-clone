@@ -2,7 +2,7 @@ import { map } from 'jquery';
 import React, {useState, useEffect} from 'react';
 import { handleErrors } from '@utils/fetchHelper';
 
-export default function Listing (props) {
+export default function ListingSnapshot (props) {
     const [displayBookings, setDisplayBookings] = useState(false)
     const [bookings, setBookings] = useState([])
     const [property, setProperty] = useState(null)
@@ -50,8 +50,6 @@ export default function Listing (props) {
                 <div className="col-5 my-3">
                     <h5>{property.title}</h5>
                     <p>{property.description}</p>
-                    {/* <p>{property.city}</p>
-                    <p>{property.price_per_night}</p> */}
                 </div>
                 <div className="col-3 d-flex flex-column my-3">
                     {/* TODO add listing page redirect with listing id once the listing page has been created */}

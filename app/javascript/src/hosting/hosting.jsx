@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import Layout from '@src/layout';
 import { handleErrors } from '@utils/fetchHelper';
 import './hosting.scss';
-import Listing from "./listing";
+import ListingSnapshot from "./listingSnapshot";
 
 export default function Hosting () {
     const [listings, setListings] = useState(null)
@@ -26,6 +26,10 @@ export default function Hosting () {
         })
     }, [username])
 
+    // TODO add a button after listings (or before, if it looks better) that lets users create a new listing. This avoids showing an empty page for people without listings
+    
+    // TODO replace null on listings? so it shows a note saying that you don't have any listings
+
     return (
         <Layout isLoggedIn={authenticated}>
             <div className="container">
@@ -33,7 +37,7 @@ export default function Hosting () {
                 {listings? listings.map( property => {
                     return (
                         <div key={property.id}>
-                            <Listing property={property} />
+                            <ListingSnapshot property={property} />
                         </div>
                     )
                 }):null}
