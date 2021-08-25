@@ -29,7 +29,7 @@ export default function Hosting () {
     return (
         <Layout isLoggedIn={authenticated}>
             <div className="container">
-                {/* {listings? <Listing property={listings[2]} />:null} */}
+                <h3 className="pt-3">Your Listings</h3>
                 {listings? listings.map( property => {
                     return (
                         <div key={property.id}>
