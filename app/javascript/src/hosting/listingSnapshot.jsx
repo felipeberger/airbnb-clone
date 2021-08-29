@@ -26,14 +26,6 @@ export default function ListingSnapshot (props) {
 
     let placeholderPic = "https://media.istockphoto.com/photos/white-studio-background-picture-id1040250650?k=6&m=1040250650&s=612x612&w=0&h=Ve0znmMwCbVyo66uIfeSrSYRuHau85oBiVIv1OplATs="
 
-    const noBookings = () => {
-        return (
-            <div className="py-3">
-                <h5>No Bookings found for this property</h5>
-            </div>
-        )
-    }
-
     if (property) {
 
         return (
@@ -52,8 +44,7 @@ export default function ListingSnapshot (props) {
                     <p>{property.description}</p>
                 </div>
                 <div className="col-3 d-flex flex-column my-3">
-                    {/* TODO add listing page redirect with listing id once the listing page has been created */}
-                    <a href="" role="button" className="btn btn-danger my-2">Edit listing</a>
+                    <a href={"listing/" + property.id} role="button" className="btn btn-danger my-2">Edit listing</a>
                     <button className="btn btn-danger my-2">Disable listing</button>
                     <button className="btn btn-danger my-2">Delete listing</button>
                 </div>
