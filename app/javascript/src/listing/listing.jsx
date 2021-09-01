@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Layout from '@src/layout';
-import { handleErrors } from '@utils/fetchHelper';
+import { handleErrors, safeCredentials } from '@utils/fetchHelper';
 import './listing.scss';
 
 export default function Listing () {
@@ -22,19 +22,63 @@ export default function Listing () {
         fetch(`/api/properties/${1}`)
             .then(handleErrors)
             .then(data => {
-                setProperty(data.property)
+                setProperty(data.property);
             })
     }, [authenticated])
 
-    const changeHandler = (e) => {
+    const submitChange = ()=> {
+        // TODO add validation to ensure that no empty key or value is passed to the API
+        console.log(update)
+        if (update) {
+            fetch(`/api/properties/${1}/update`, safeCredentials({
+                method: 'POST',
+                body: JSON.stringify({update})
+    
+            }))
+                .then(handleErrors)
+                .then(res => {
+                    console.log(res);
+                    setUpdate(null);
+                })
+        }
+
+    }
+
+    const updateHandler = (e) => {
         const key = e.target.id
         const value = e.target.value
-        setUpdate( {[key] : value} )
+        setUpdate( {[key] : value})
     } 
+
+    function Edit () {
+        const [editing, setEditing] = useState(false);
+
+        useState( ()=> {
+            console.log(editing);
+        }, [editing])
+
+        const editingHandler = (e) => {
+            
+            console.log(e);
+
+            setEditing( () => {
+                if (editing) {
+                    submitChange();
+                }
+                return !editing
+            })
+        }
+
+        return (
+            <button type="button" className="btn btn-link" onClick={editingHandler}>{editing? "Done": "Edit >"}</button>
+        )
+
+    }
 
     const listing = () => {
         return(
             <Layout isLoggedIn={authenticated}>
+                <button onClick={submitChange}>Submit changes</button>
                 <div className="container">
                     <div className="pt-4 pb-2">
                         <h2>Your listing</h2>
@@ -46,7 +90,7 @@ export default function Listing () {
                             <p className=""><strong>Photos</strong></p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <a href="">Edit ></a>
+                            <Edit />
                         </div>
                         <hr />
                     </div>
@@ -57,10 +101,10 @@ export default function Listing () {
                             <p className="">Title</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <a href="">Edit ></a>
+                            <Edit />
                         </div>
                         <div className="form-group pr-5">
-                           <input type="text" className="form-control" id="title" defaultValue={property.title} onChange={changeHandler} />
+                           <input type="text" className="form-control" id="title" defaultValue={property.title} onChange={updateHandler} />
                         </div>
                         <hr />
 
@@ -68,10 +112,10 @@ export default function Listing () {
                             <p className="">Description</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <a href="">Edit ></a>
+                            <Edit />
                         </div>
                         <div className="form-group pr-5">
-                            <textarea className="form-control" id="description" defaultValue={property.description} onChange={changeHandler} />
+                            <textarea className="form-control" id="description" defaultValue={property.description} onChange={updateHandler} />
                         </div>
                         <hr />
 
@@ -79,7 +123,7 @@ export default function Listing () {
                             <p className="">Price per night</p>
                         </div>
                         <div className="form-group d-inline-block float-right">
-                            <input type="number" className="form-control" id="price_per_night" placeholder="$" defaultValue={property.price_per_night} onChange={changeHandler}/>
+                            <input type="number" className="form-control" id="price_per_night" placeholder="$" defaultValue={property.price_per_night} onChange={updateHandler}/>
                         </div>
                         <hr />
 
@@ -87,7 +131,7 @@ export default function Listing () {
                             <p className="">Number of guests</p>
                         </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="max_guests" defaultValue={property.max_guests} onChange={changeHandler}>
+                            <select className="form-control pr-2" id="max_guests" defaultValue={property.max_guests} onChange={updateHandler}>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -107,10 +151,10 @@ export default function Listing () {
                             <p className="">City</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <a href="">Edit ></a>
+                            <Edit />
                         </div>
                         <div className="form-group pr-5">
-                           <input type="text" className="form-control" id="city" defaultValue={property.city} onChange={changeHandler}/>
+                           <input type="text" className="form-control" id="city" defaultValue={property.city} onChange={updateHandler}/>
                         </div>
                         <hr />
 
@@ -118,10 +162,10 @@ export default function Listing () {
                             <p className="">Country</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <a href="">Edit ></a>
+                            <Edit />
                         </div>
                         <div className="form-group pr-5">
-                           <input type="text" className="form-control" id="country" defaultValue={property.country} onChange={changeHandler}/>
+                           <input type="text" className="form-control" id="country" defaultValue={property.country} onChange={updateHandler}/>
                         </div>
                         <hr />
                     </div>
@@ -132,7 +176,7 @@ export default function Listing () {
                             <p className="">Property type</p>
                         </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="property_type" defaultValue={property.property_type} onChange={changeHandler}>
+                            <select className="form-control pr-2" id="property_type" defaultValue={property.property_type} onChange={updateHandler}>
                                 <option>studio</option>
                                 <option>entire apartment</option>
                                 <option>private room in apartment</option>
@@ -147,7 +191,7 @@ export default function Listing () {
                             <p className="">Bedrooms</p>
                         </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="bedrooms" defaultValue={property.bedrooms} onChange={changeHandler}>
+                            <select className="form-control pr-2" id="bedrooms" defaultValue={property.bedrooms} onChange={updateHandler}>
                                 <option>0</option>
                                 <option>1</option>
                                 <option>2</option>
@@ -164,7 +208,7 @@ export default function Listing () {
                             <p className="">Beds</p>
                         </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="beds" defaultValue={property.beds} onChange={changeHandler}>
+                            <select className="form-control pr-2" id="beds" defaultValue={property.beds} onChange={updateHandler}>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -180,7 +224,7 @@ export default function Listing () {
                             <p className="">Bathrooms</p>
                         </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="baths" defaultValue={property.baths} onChange={changeHandler}>
+                            <select className="form-control pr-2" id="baths" defaultValue={property.baths} onChange={updateHandler}>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
