@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Layout from '@src/layout';
+import Edit from './edit';
 import { handleErrors, safeCredentials } from '@utils/fetchHelper';
 import './listing.scss';
 
@@ -8,6 +9,10 @@ export default function Listing () {
     const [property, setProperty] = useState(null)
     const [username, setUsername] = useState(null)
     const [update, setUpdate] = useState(null)
+    const [title, setTitle] = useState(false)
+    const [description, setDescription] = useState(false)
+    const [city, setCity] = useState(false)
+    const [country, setCountry] = useState(false)
     
     useEffect( () => {
         fetch('/api/authenticated')
@@ -28,7 +33,6 @@ export default function Listing () {
 
     const submitChange = ()=> {
         // TODO add validation to ensure that no empty key or value is passed to the API
-        console.log(update)
         if (update) {
             fetch(`/api/properties/${1}/update`, safeCredentials({
                 method: 'POST',
@@ -48,37 +52,11 @@ export default function Listing () {
         const key = e.target.id
         const value = e.target.value
         setUpdate( {[key] : value})
-    } 
-
-    function Edit () {
-        const [editing, setEditing] = useState(false);
-
-        useState( ()=> {
-            console.log(editing);
-        }, [editing])
-
-        const editingHandler = (e) => {
-            
-            console.log(e);
-
-            setEditing( () => {
-                if (editing) {
-                    submitChange();
-                }
-                return !editing
-            })
-        }
-
-        return (
-            <button type="button" className="btn btn-link" onClick={editingHandler}>{editing? "Done": "Edit >"}</button>
-        )
-
     }
 
     const listing = () => {
         return(
             <Layout isLoggedIn={authenticated}>
-                <button onClick={submitChange}>Submit changes</button>
                 <div className="container">
                     <div className="pt-4 pb-2">
                         <h2>Your listing</h2>
@@ -90,7 +68,7 @@ export default function Listing () {
                             <p className=""><strong>Photos</strong></p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit />
+                            <Edit changeHandler={submitChange}/>
                         </div>
                         <hr />
                     </div>
@@ -101,10 +79,11 @@ export default function Listing () {
                             <p className="">Title</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit />
+                            <Edit changeHandler={submitChange} />
                         </div>
                         <div className="form-group pr-5">
-                           <input type="text" className="form-control" id="title" defaultValue={property.title} onChange={updateHandler} />
+                            {title? <input type="text" className="form-control" id="title" defaultValue={property.title} onChange={updateHandler} /> : <input type="text" className="form-control" id="title" defaultValue={property.title} onChange={updateHandler} disabled/>}
+                           
                         </div>
                         <hr />
 
@@ -112,10 +91,11 @@ export default function Listing () {
                             <p className="">Description</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit />
+                            <Edit changeHandler={submitChange}/>
                         </div>
                         <div className="form-group pr-5">
-                            <textarea className="form-control" id="description" defaultValue={property.description} onChange={updateHandler} />
+                            {description? <textarea className="form-control" id="description" defaultValue={property.description} onChange={updateHandler} /> : <textarea className="form-control" id="description" defaultValue={property.description} onChange={updateHandler} disabled/>}
+                            
                         </div>
                         <hr />
 
@@ -151,10 +131,11 @@ export default function Listing () {
                             <p className="">City</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit />
+                            <Edit changeHandler={submitChange}/>
                         </div>
                         <div className="form-group pr-5">
-                           <input type="text" className="form-control" id="city" defaultValue={property.city} onChange={updateHandler}/>
+                            {city? <input type="text" className="form-control" id="city" defaultValue={property.city} onChange={updateHandler}/> : <input type="text" className="form-control" id="city" defaultValue={property.city} onChange={updateHandler} disabled/>}
+                           
                         </div>
                         <hr />
 
@@ -162,10 +143,11 @@ export default function Listing () {
                             <p className="">Country</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit />
+                            <Edit changeHandler={submitChange}/>
                         </div>
                         <div className="form-group pr-5">
-                           <input type="text" className="form-control" id="country" defaultValue={property.country} onChange={updateHandler}/>
+                            {country? <input type="text" className="form-control" id="country" defaultValue={property.country} onChange={updateHandler}/> : <input type="text" className="form-control" id="country" defaultValue={property.country} onChange={updateHandler} disabled/>}
+                           
                         </div>
                         <hr />
                     </div>
