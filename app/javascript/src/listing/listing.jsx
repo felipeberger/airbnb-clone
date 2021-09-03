@@ -7,21 +7,23 @@ import './listing.scss';
 export default function Listing () {
     const [authenticated, setAuthenticated] = useState(false)
     const [property, setProperty] = useState(null)
-    // const [username, setUsername] = useState(null)
     const [update, setUpdate] = useState(null)
     const [title, setTitle] = useState(false)
     const [description, setDescription] = useState(false)
     const [city, setCity] = useState(false)
     const [country, setCountry] = useState(false)
     const [maxGuests, setMaxGuests] = useState(false)
-    const []
+    const [propertyType, setPropertyType] = useState(false)
+    const [pricePerNight, setPricePerNight] = useState(false)
+    const [bedrooms, setBedrooms] = useState(false)
+    const [beds, setBeds] = useState(false)
+    const [baths, setBaths] = useState(false)
     
     useEffect( () => {
         fetch('/api/authenticated')
           .then(handleErrors)
           .then(data => {
             setAuthenticated(data.authenticated)
-            // setUsername(data.username)
           })
         }, [])
 
@@ -58,13 +60,8 @@ export default function Listing () {
         const key = e.target.id
         const value = e.target.value
         setUpdate( {[key] : value})
-
-        switch (key) {
-            case "max_guests":
-                
-            break;
-        }
     }
+    
 
     const updateState = (target) => {
 
@@ -81,16 +78,33 @@ export default function Listing () {
             case "country":
                 setCountry(prevState => !prevState)
             break;
+            case "max_guests":
+                setMaxGuests(prevState => !prevState)
+            break;
+            case "price_per_night":
+                setPricePerNight(prevState => !prevState)
+            break;
+            case "property_type":
+                setPropertyType(prevState => !prevState)
+            break;
+            case "bedrooms":
+                setBedrooms(prevState => !prevState)
+            break;
+            case "beds":
+                setBeds(prevState => !prevState)
+            break;
+            case "baths":
+                setBaths(prevState => !prevState)
+            break;
             default:
                 return null;
         }
-
     }
 
     const listing = () => {
         return(
             <Layout isLoggedIn={authenticated}>
-                <div className="container">
+                <div className="container pb-4">
                     <div className="pt-4 pb-2">
                         <h2>Your listing</h2>
                         <h5><i>{property.title}</i></h5>
@@ -135,16 +149,24 @@ export default function Listing () {
                         <div className="d-inline-block">
                             <p className="">Price per night</p>
                         </div>
-                        <div className="form-group d-inline-block float-right">
-                            <input type="number" className="form-control" id="price_per_night" placeholder="$" defaultValue={property.price_per_night} onChange={updateHandler}/>
+                        <div className="d-inline-block float-right">
+                            <Edit changeHandler={submitChange} updater={updateState} target="price_per_night" />
+                        </div>
+                        <div className="form-group pr-5">
+                            {pricePerNight? <input type="number" className="form-control" id="price_per_night" placeholder="$" defaultValue={property.price_per_night} onChange={updateHandler}/> : <input type="number" className="form-control" id="price_per_night" placeholder="$" defaultValue={property.price_per_night} onChange={updateHandler} disabled/>}
+                            
                         </div>
                         <hr />
 
                         <div className="d-inline-block">
                             <p className="">Number of guests</p>
                         </div>
+                        <div className="d-inline-block float-right">
+                            <Edit changeHandler={submitChange} updater={updateState} target="max_guests" />
+                        </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="max_guests" defaultValue={property.max_guests} onChange={updateHandler}>
+                            {maxGuests? 
+                            (<select className="form-control pr-2" id="max_guests" defaultValue={property.max_guests} onChange={updateHandler}>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -152,11 +174,20 @@ export default function Listing () {
                                 <option>5</option>
                                 <option>6</option>
                                 <option>7+</option>
-                            </select>
+                            </select>) : 
+                            (<select className="form-control pr-2" id="max_guests" defaultValue={property.max_guests} onChange={updateHandler} disabled>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7+</option>
+                            </select>)}
+                            
                         </div>
-                        <hr />
-
                     </div>
+                    <hr />
                     <div className="location">
                         <p><strong>Location</strong></p>
 
@@ -190,23 +221,40 @@ export default function Listing () {
                         <div className="d-inline-block">
                             <p className="">Property type</p>
                         </div>
+                        <div className="d-inline-block float-right">
+                            <Edit changeHandler={submitChange} updater={updateState} target="property_type" />
+                        </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="property_type" defaultValue={property.property_type} onChange={updateHandler}>
-                                <option>studio</option>
-                                <option>entire apartment</option>
-                                <option>private room in apartment</option>
-                                <option>room in hotel</option>
-                                <option>entire house</option>
-                                <option>entire condominium</option>
-                            </select>
+                            {propertyType? 
+                            (<select className="form-control pr-2" id="property_type" defaultValue={property.property_type} onChange={updateHandler}>
+                            <option>studio</option>
+                            <option>entire apartment</option>
+                            <option>private room in apartment</option>
+                            <option>room in hotel</option>
+                            <option>entire house</option>
+                            <option>entire condominium</option>
+                        </select>) : 
+                            (<select className="form-control pr-2" id="property_type" defaultValue={property.property_type} onChange={updateHandler} disabled>
+                            <option>studio</option>
+                            <option>entire apartment</option>
+                            <option>private room in apartment</option>
+                            <option>room in hotel</option>
+                            <option>entire house</option>
+                            <option>entire condominium</option>
+                        </select>)}
+                            
                         </div>
                         <hr />
 
                         <div className="d-inline-block">
                             <p className="">Bedrooms</p>
                         </div>
+                        <div className="d-inline-block float-right">
+                            <Edit changeHandler={submitChange} updater={updateState} target="bedrooms" />
+                        </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="bedrooms" defaultValue={property.bedrooms} onChange={updateHandler}>
+                            {bedrooms? 
+                            (<select className="form-control pr-2" id="bedrooms" defaultValue={property.bedrooms} onChange={updateHandler}>
                                 <option>0</option>
                                 <option>1</option>
                                 <option>2</option>
@@ -215,15 +263,29 @@ export default function Listing () {
                                 <option>5</option>
                                 <option>6</option>
                                 <option>7+</option>
-                            </select>
+                            </select>): 
+                            (<select className="form-control pr-2" id="bedrooms" defaultValue={property.bedrooms} onChange={updateHandler} disabled>
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7+</option>
+                            </select>)}
                         </div>
                         <hr />
 
                         <div className="d-inline-block">
                             <p className="">Beds</p>
                         </div>
+                        <div className="d-inline-block float-right">
+                            <Edit changeHandler={submitChange} updater={updateState} target="beds" />
+                        </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="beds" defaultValue={property.beds} onChange={updateHandler}>
+                            {beds? 
+                            (<select className="form-control pr-2" id="beds" defaultValue={property.beds} onChange={updateHandler}>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -231,15 +293,28 @@ export default function Listing () {
                                 <option>5</option>
                                 <option>6</option>
                                 <option>7+</option>
-                            </select>
+                            </select>):
+                            (<select className="form-control pr-2" id="beds" defaultValue={property.beds} onChange={updateHandler} disabled>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7+</option>
+                            </select>)}
                         </div>
                         <hr />
 
                         <div className="d-inline-block">
                             <p className="">Bathrooms</p>
                         </div>
+                        <div className="d-inline-block float-right">
+                            <Edit changeHandler={submitChange} updater={updateState} target="baths" />
+                        </div>
                         <div className="form-group d-inline-block float-right">
-                            <select className="form-control pr-2" id="baths" defaultValue={property.baths} onChange={updateHandler}>
+                            {baths? 
+                            (<select className="form-control pr-2" id="baths" defaultValue={property.baths} onChange={updateHandler}>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
@@ -247,7 +322,17 @@ export default function Listing () {
                                 <option>5</option>
                                 <option>6</option>
                                 <option>7+</option>
-                            </select>
+                            </select>):
+                            (<select className="form-control pr-2" id="baths" defaultValue={property.baths} onChange={updateHandler} disabled>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7+</option>
+                            </select>)}
+                            
                         </div>
 
                     </div>
