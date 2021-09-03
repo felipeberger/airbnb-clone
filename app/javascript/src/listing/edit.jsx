@@ -4,6 +4,7 @@ export default function Edit (props) {
     const [editing, setEditing] = useState(false);
     
     const editingHandler = () => {
+        props.updater(props.target);
         setEditing( () => {
             if (editing) {
                 props.changeHandler();

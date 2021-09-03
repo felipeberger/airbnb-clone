@@ -7,19 +7,21 @@ import './listing.scss';
 export default function Listing () {
     const [authenticated, setAuthenticated] = useState(false)
     const [property, setProperty] = useState(null)
-    const [username, setUsername] = useState(null)
+    // const [username, setUsername] = useState(null)
     const [update, setUpdate] = useState(null)
     const [title, setTitle] = useState(false)
     const [description, setDescription] = useState(false)
     const [city, setCity] = useState(false)
     const [country, setCountry] = useState(false)
+    const [maxGuests, setMaxGuests] = useState(false)
+    const []
     
     useEffect( () => {
         fetch('/api/authenticated')
           .then(handleErrors)
           .then(data => {
             setAuthenticated(data.authenticated)
-            setUsername(data.username)
+            // setUsername(data.username)
           })
         }, [])
 
@@ -30,6 +32,10 @@ export default function Listing () {
                 setProperty(data.property);
             })
     }, [authenticated])
+
+    useEffect( ()=> {
+
+    }, [])
 
     const submitChange = ()=> {
         // TODO add validation to ensure that no empty key or value is passed to the API
@@ -52,6 +58,33 @@ export default function Listing () {
         const key = e.target.id
         const value = e.target.value
         setUpdate( {[key] : value})
+
+        switch (key) {
+            case "max_guests":
+                
+            break;
+        }
+    }
+
+    const updateState = (target) => {
+
+        switch (target) {
+            case "title":
+                setTitle(prevState => !prevState)
+            break;
+            case "description":
+                setDescription(prevState => !prevState)
+            break;
+            case "city":
+                setCity(prevState => !prevState)
+            break;
+            case "country":
+                setCountry(prevState => !prevState)
+            break;
+            default:
+                return null;
+        }
+
     }
 
     const listing = () => {
@@ -68,7 +101,7 @@ export default function Listing () {
                             <p className=""><strong>Photos</strong></p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit changeHandler={submitChange}/>
+                            <Edit changeHandler={submitChange} updater={updateState} />
                         </div>
                         <hr />
                     </div>
@@ -79,7 +112,7 @@ export default function Listing () {
                             <p className="">Title</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit changeHandler={submitChange} />
+                            <Edit changeHandler={submitChange} updater={updateState} target="title" />
                         </div>
                         <div className="form-group pr-5">
                             {title? <input type="text" className="form-control" id="title" defaultValue={property.title} onChange={updateHandler} /> : <input type="text" className="form-control" id="title" defaultValue={property.title} onChange={updateHandler} disabled/>}
@@ -91,7 +124,7 @@ export default function Listing () {
                             <p className="">Description</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit changeHandler={submitChange}/>
+                            <Edit changeHandler={submitChange} updater={updateState} target="description" />
                         </div>
                         <div className="form-group pr-5">
                             {description? <textarea className="form-control" id="description" defaultValue={property.description} onChange={updateHandler} /> : <textarea className="form-control" id="description" defaultValue={property.description} onChange={updateHandler} disabled/>}
@@ -131,7 +164,7 @@ export default function Listing () {
                             <p className="">City</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit changeHandler={submitChange}/>
+                            <Edit changeHandler={submitChange} updater={updateState} target="city" />
                         </div>
                         <div className="form-group pr-5">
                             {city? <input type="text" className="form-control" id="city" defaultValue={property.city} onChange={updateHandler}/> : <input type="text" className="form-control" id="city" defaultValue={property.city} onChange={updateHandler} disabled/>}
@@ -143,7 +176,7 @@ export default function Listing () {
                             <p className="">Country</p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit changeHandler={submitChange}/>
+                            <Edit changeHandler={submitChange} updater={updateState} target="country" />
                         </div>
                         <div className="form-group pr-5">
                             {country? <input type="text" className="form-control" id="country" defaultValue={property.country} onChange={updateHandler}/> : <input type="text" className="form-control" id="country" defaultValue={property.country} onChange={updateHandler} disabled/>}
