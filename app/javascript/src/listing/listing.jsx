@@ -18,6 +18,8 @@ export default function Listing () {
     const [bedrooms, setBedrooms] = useState(false)
     const [beds, setBeds] = useState(false)
     const [baths, setBaths] = useState(false)
+    const [upload, setUpload] = useState(false)
+    const [pictures, setPictures] = useState(null)
     
     useEffect( () => {
         fetch('/api/authenticated')
@@ -49,7 +51,6 @@ export default function Listing () {
             }))
                 .then(handleErrors)
                 .then(res => {
-                    console.log(res);
                     setUpdate(null);
                 })
         }
@@ -116,6 +117,11 @@ export default function Listing () {
                         </div>
                         <div className="d-inline-block float-right">
                             <Edit changeHandler={submitChange} updater={updateState} />
+                        </div>
+                        <div>
+                            <label className="pr-2">Select pictures</label>
+                            <input type="file" id="image-select" name="image" accept="image/*" />
+                            <button className="btn btn-secondary" id="post-image">Upload</button>
                         </div>
                         <hr />
                     </div>
