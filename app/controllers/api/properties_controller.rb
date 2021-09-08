@@ -71,5 +71,11 @@ module Api
         render 'api/properties/update', status: :ok
       end
 
+      private
+
+        def properties_params
+          params.require(:property).permit(:title, :city, images: [])
+        end
+
     end
   end
