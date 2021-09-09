@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Layout from '@src/layout';
 import Edit from './edit';
-import { handleErrors, safeCredentials } from '@utils/fetchHelper';
+import { handleErrors, safeCredentials, safeCredentialsForm } from '@utils/fetchHelper';
 import './listing.scss';
 
 export default function Listing () {
@@ -20,6 +20,7 @@ export default function Listing () {
     const [baths, setBaths] = useState(false)
     const [upload, setUpload] = useState(false)
     const [pictures, setPictures] = useState(null)
+    const uploadInput = useRef(null)
     
     useEffect( () => {
         fetch('/api/authenticated')
@@ -34,12 +35,9 @@ export default function Listing () {
             .then(handleErrors)
             .then(data => {
                 setProperty(data.property);
+                console.log(data.property)
             })
     }, [authenticated])
-
-    useEffect( ()=> {
-
-    }, [])
 
     const submitChange = ()=> {
         // TODO add validation to ensure that no empty key or value is passed to the API
@@ -102,6 +100,25 @@ export default function Listing () {
         }
     }
 
+    const uploadImage = () => {
+        let formData = new FormData ();
+        for (let i = 0;i < uploadInput.current.files.length; i++) {
+            formData.append('image[]',uploadInput.current.files[i])
+        }
+
+        fetch(`/api/properties/${1}/update`, safeCredentialsForm({
+            method: 'POST',
+            body: formData
+
+        }))
+            .then(handleErrors)
+            .then(res => {
+                setUpdate(null);
+                console.log(res)
+            })
+
+    }
+
     const listing = () => {
         return(
             <Layout isLoggedIn={authenticated}>
@@ -120,8 +137,8 @@ export default function Listing () {
                         </div>
                         <div>
                             <label className="pr-2">Select pictures</label>
-                            <input type="file" id="image-select" name="image" accept="image/*" />
-                            <button className="btn btn-secondary" id="post-image">Upload</button>
+                            <input ref={uploadInput} type="file" id="image-select" name="images" accept="image/*" multiple/>
+                            <button className="btn btn-secondary" id="post-image" onClick={uploadImage}>Upload</button>
                         </div>
                         <hr />
                     </div>

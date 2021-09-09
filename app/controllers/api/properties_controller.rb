@@ -57,18 +57,32 @@ module Api
       end
 
       def update
-        @name = params[:update].keys[0].to_sym
-        @value = params[:update][@name]
-        return render json: {error: 'key is empty'}, status: :bad_request if !@name
-        return render json: {error: 'value is empty'}, status: :bad_request if !@value
 
-        @property = Property.find_by(id: params[:id].to_i)
-        return render json: { error: 'No property found'}, status: :not_found if !@property
+        if params[:image]
 
-        @property[@name] = @value
-        @property.save
-
+          @property = Property.find_by(id: params[:id].to_i)
+          return render json: { error: 'No property found'}, status: :not_found if !@property
+        
+          @property.images.attach(params[:image])
+          @property.save
+          
+        else
+          
+          @name = params[:update].keys[0].to_sym
+          @value = params[:update][@name]
+          return render json: {error: 'key is empty'}, status: :bad_request if !@name
+          return render json: {error: 'value is empty'}, status: :bad_request if !@value
+  
+          @property = Property.find_by(id: params[:id].to_i)
+          return render json: { error: 'No property found'}, status: :not_found if !@property
+  
+          @property[@name] = @value
+          @property.save
+  
+        end
+      
         render 'api/properties/update', status: :ok
+
       end
 
       private
