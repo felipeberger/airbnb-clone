@@ -19,7 +19,7 @@ export default function Listing () {
     const [beds, setBeds] = useState(false)
     const [baths, setBaths] = useState(false)
     const [upload, setUpload] = useState(false)
-    const [pictures, setPictures] = useState(null)
+    const [removePictures, setRemovePictures] = useState([])
     const uploadInput = useRef(null)
     
     useEffect( () => {
@@ -38,6 +38,10 @@ export default function Listing () {
                 console.log(data.property)
             })
     }, [authenticated])
+
+    useEffect(()=> {
+        console.log(removePictures)
+    }, [removePictures])
 
     const submitChange = ()=> {
         // TODO add validation to ensure that no empty key or value is passed to the API
@@ -100,23 +104,36 @@ export default function Listing () {
         }
     }
 
+    
     const uploadImage = () => {
         let formData = new FormData ();
         for (let i = 0;i < uploadInput.current.files.length; i++) {
             formData.append('image[]',uploadInput.current.files[i])
         }
-
+        
         fetch(`/api/properties/${1}/update`, safeCredentialsForm({
             method: 'POST',
             body: formData
-
+            
         }))
-            .then(handleErrors)
-            .then(res => {
-                setUpdate(null);
-                console.log(res)
-            })
-
+        .then(handleErrors)
+        .then(res => {
+            setUpdate(null);
+            console.log(res)
+        })
+        
+    }
+    
+    const removePicHandler = (e) => {
+        let temp = removePictures
+        if (temp.includes(e.target.src)) {
+            temp = temp.filter(pic => pic != e.target.src)
+            e.target.style = {opacity: 1}
+        } else {
+            temp.push(e.target.src)
+            e.target.style = {opacity: 0.2}
+        } 
+        setRemovePictures(temp)
     }
 
     const listing = () => {
@@ -135,10 +152,18 @@ export default function Listing () {
                         <div className="d-inline-block float-right">
                             <Edit changeHandler={submitChange} updater={updateState} />
                         </div>
-                        <div>
-                            <label className="pr-2">Select pictures</label>
-                            <input ref={uploadInput} type="file" id="image-select" name="images" accept="image/*" multiple/>
-                            <button className="btn btn-secondary" id="post-image" onClick={uploadImage}>Upload</button>
+                        <div className="row">
+                            {property.images.map(image => {
+                                return (
+                                    <div key={image.image_url} className="col-4 py-1 px-1">
+                                        <img src={image.image_url} alt="" className="img-thumbnail img-fluid" onClick={removePicHandler} style={{opacity: 1}}/>
+                                    </div>
+                                )
+                            })}
+                            <div className="col-4 align-self-center text-center">
+                                <input ref={uploadInput} className="" type="file" id="image-select" name="images" accept="image/*" multiple hidden/>
+                                <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()}>Add more pictures</button>
+                            </div>                            
                         </div>
                         <hr />
                     </div>
