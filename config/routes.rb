@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     get '/properties/:arrayOfId/search' => 'properties#get_properties_by_id'
     get '/properties/:city/check' => 'properties#check_city'
     post '/properties/:id/update' => 'properties#update'
+    post '/properties/:id/updateImages' => 'properties#updateImages'
     
     # Bookings
     get '/properties/:id/bookings' => 'bookings#get_property_bookings'

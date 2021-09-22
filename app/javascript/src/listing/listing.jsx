@@ -18,8 +18,9 @@ export default function Listing () {
     const [bedrooms, setBedrooms] = useState(false)
     const [beds, setBeds] = useState(false)
     const [baths, setBaths] = useState(false)
-    const [upload, setUpload] = useState(false)
-    const [removePictures, setRemovePictures] = useState([])
+    const [pictures, setPictures] = useState(false)
+    const [removePicturesArray, setRemovePicturesArray] = useState([])
+    const [picturesArray, setPicturesArray] = useState([])
     const uploadInput = useRef(null)
     
     useEffect( () => {
@@ -31,17 +32,20 @@ export default function Listing () {
         }, [])
 
     useEffect( ()=> {
+        let picsObject = []
         fetch(`/api/properties/${1}`)
             .then(handleErrors)
             .then(data => {
                 setProperty(data.property);
                 console.log(data.property)
+
+                picsObject = data.property.images.map(image => {
+                    return {image_url: image.image_url, signed_id: image.signed_id, opacity: 1}
+                })
+
+                setPicturesArray(picsObject)
             })
     }, [authenticated])
-
-    useEffect(()=> {
-        console.log(removePictures)
-    }, [removePictures])
 
     const submitChange = ()=> {
         // TODO add validation to ensure that no empty key or value is passed to the API
@@ -56,19 +60,20 @@ export default function Listing () {
                     setUpdate(null);
                 })
         }
-
     }
 
     const updateHandler = (e) => {
         const key = e.target.id
         const value = e.target.value
-        setUpdate( {[key] : value})
+        setUpdate({[key] : value})
     }
     
-
     const updateState = (target) => {
 
         switch (target) {
+            case "pictures":
+                setPictures(prevState => !prevState)
+            break;
             case "title":
                 setTitle(prevState => !prevState)
             break;
@@ -103,8 +108,29 @@ export default function Listing () {
                 return null;
         }
     }
-
     
+    const selectPicHandler = (e) => {
+        let temp = []
+        let removePics = []
+        let src = e.target.src
+
+        if (pictures) {
+            temp = picturesArray.map(image => {
+                
+                if (image.opacity === 0.5 && src.includes(image.image_url)) {
+                    return {image_url: image.image_url, signed_id: image.signed_id, opacity: 1}
+                } else if (image.opacity === 0.5 || src.includes(image.image_url)) {
+                    removePics.push(image.signed_id)
+                    return {image_url: image.image_url, signed_id: image.signed_id, opacity: 0.5}
+                } 
+                return {image_url: image.image_url, signed_id: image.signed_id, opacity: 1}
+            })
+    
+            setPicturesArray(temp)
+            setRemovePicturesArray(removePics)
+        }
+    }
+
     const uploadImage = () => {
         let formData = new FormData ();
         for (let i = 0;i < uploadInput.current.files.length; i++) {
@@ -121,19 +147,29 @@ export default function Listing () {
             setUpdate(null);
             console.log(res)
         })
-        
     }
-    
-    const removePicHandler = (e) => {
-        let temp = removePictures
-        if (temp.includes(e.target.src)) {
-            temp = temp.filter(pic => pic != e.target.src)
-            e.target.style = {opacity: 1}
-        } else {
-            temp.push(e.target.src)
-            e.target.style = {opacity: 0.2}
-        } 
-        setRemovePictures(temp)
+
+    const removeImage = () => {
+        console.log(removePicturesArray)
+        let data = {signed_id: "xxxxxxxxxxxxx"}
+        fetch(`/api/properties/${1}/updateImages`, safeCredentialsForm({
+            method: 'POST',
+            body: removePicturesArray
+        }))
+        .then(handleErrors)
+        .then(res => {
+            console.log(res)
+        })
+    }
+
+    const imageUpdateHandler = () => {
+        if (picturesArray) {
+            uploadImage()
+        }
+
+        if (removePicturesArray) {
+            removeImage()
+        }
     }
 
     const listing = () => {
@@ -150,19 +186,20 @@ export default function Listing () {
                             <p className=""><strong>Photos</strong></p>
                         </div>
                         <div className="d-inline-block float-right">
-                            <Edit changeHandler={submitChange} updater={updateState} />
+                            <Edit changeHandler={imageUpdateHandler} updater={updateState} target="pictures" />
                         </div>
                         <div className="row">
-                            {property.images.map(image => {
+                            {picturesArray.map(image => {
                                 return (
                                     <div key={image.image_url} className="col-4 py-1 px-1">
-                                        <img src={image.image_url} alt="" className="img-thumbnail img-fluid" onClick={removePicHandler} style={{opacity: 1}}/>
+                                        <img src={image.image_url} alt="" className="img-thumbnail img-fluid" onClick={selectPicHandler} style={{opacity: image.opacity}} id={image.signed_id}/>
                                     </div>
                                 )
                             })}
                             <div className="col-4 align-self-center text-center">
                                 <input ref={uploadInput} className="" type="file" id="image-select" name="images" accept="image/*" multiple hidden/>
-                                <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()}>Add more pictures</button>
+                                {pictures? <button className="btn btn-secondary" id="post-image" onClick={removeImage} >Add more pictures</button> : <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()} hidden>Add more pictures</button>}
+                                
                             </div>                            
                         </div>
                         <hr />

@@ -85,6 +85,46 @@ module Api
 
       end
 
+      def updateImages
+
+        removeTheseImages = request.body
+        @imageKeys
+        # @imagesPurge
+        @property = Property.find_by(id: params[:id].to_i)
+        return render json: { error: 'No property found'}, status: :not_found if !@property
+      
+        # @pictures = ActiveStorage::Blob.where(id: @images)
+        # @pictures = ActiveStorage::Blob.first.signed_id
+        # @pictures = @property.images.find_by(blob_id: @images)
+        @pictures = @property.images
+
+        # @removeTheseImages.each_line (sep=$,) {|line| 
+        #   puts "line is:"  
+        #   puts line
+        # }
+
+        removeTheseImages.each do |line|
+          @imageKeys = line.split(",")
+          puts @imageKeys
+        end
+
+        @pictures.each do |pic|
+          @imageKeys.each do |key|
+            if pic.signed_id == key
+              pic.purge
+            end
+          end
+        end
+
+        puts "images"
+        puts removeTheseImages.class
+
+        return render json: {result: @removeTheseImages}
+
+        # @pictures.purge
+
+      end
+
       private
 
         def properties_params
