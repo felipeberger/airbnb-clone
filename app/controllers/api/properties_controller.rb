@@ -89,19 +89,10 @@ module Api
 
         removeTheseImages = request.body
         @imageKeys
-        # @imagesPurge
         @property = Property.find_by(id: params[:id].to_i)
         return render json: { error: 'No property found'}, status: :not_found if !@property
       
-        # @pictures = ActiveStorage::Blob.where(id: @images)
-        # @pictures = ActiveStorage::Blob.first.signed_id
-        # @pictures = @property.images.find_by(blob_id: @images)
         @pictures = @property.images
-
-        # @removeTheseImages.each_line (sep=$,) {|line| 
-        #   puts "line is:"  
-        #   puts line
-        # }
 
         removeTheseImages.each do |line|
           @imageKeys = line.split(",")
@@ -116,13 +107,7 @@ module Api
           end
         end
 
-        puts "images"
-        puts removeTheseImages.class
-
-        return render json: {result: @removeTheseImages}
-
-        # @pictures.purge
-
+        render 'api/properties/show', status: :ok
       end
 
       private

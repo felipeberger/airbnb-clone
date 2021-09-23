@@ -38,12 +38,7 @@ export default function Listing () {
             .then(data => {
                 setProperty(data.property);
                 console.log(data.property)
-
-                picsObject = data.property.images.map(image => {
-                    return {image_url: image.image_url, signed_id: image.signed_id, opacity: 1}
-                })
-
-                setPicturesArray(picsObject)
+                mapImages(data.property)
             })
     }, [authenticated])
 
@@ -109,6 +104,7 @@ export default function Listing () {
         }
     }
     
+    // Grays out pictures to show selection and adds those to an array to be used for purging pics
     const selectPicHandler = (e) => {
         let temp = []
         let removePics = []
@@ -144,14 +140,13 @@ export default function Listing () {
         }))
         .then(handleErrors)
         .then(res => {
-            setUpdate(null);
             console.log(res)
+            mapImages(res.update)
         })
     }
 
     const removeImage = () => {
         console.log(removePicturesArray)
-        let data = {signed_id: "xxxxxxxxxxxxx"}
         fetch(`/api/properties/${1}/updateImages`, safeCredentialsForm({
             method: 'POST',
             body: removePicturesArray
@@ -159,17 +154,26 @@ export default function Listing () {
         .then(handleErrors)
         .then(res => {
             console.log(res)
+            mapImages(res.property)
+            setRemovePicturesArray([])
         })
     }
 
     const imageUpdateHandler = () => {
-        if (picturesArray) {
+        if (picturesArray.length > 0) {
             uploadImage()
         }
 
-        if (removePicturesArray) {
+        if (removePicturesArray.length > 0) {
             removeImage()
         }
+    }
+
+    const mapImages = (response) => {
+        let picsObject = response.images.map(image => {
+            return {image_url: image.image_url, signed_id: image.signed_id, opacity: 1}
+        })
+        setPicturesArray(picsObject)
     }
 
     const listing = () => {
@@ -198,7 +202,7 @@ export default function Listing () {
                             })}
                             <div className="col-4 align-self-center text-center">
                                 <input ref={uploadInput} className="" type="file" id="image-select" name="images" accept="image/*" multiple hidden/>
-                                {pictures? <button className="btn btn-secondary" id="post-image" onClick={removeImage} >Add more pictures</button> : <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()} hidden>Add more pictures</button>}
+                                {pictures? <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()} >Add more pictures</button> : <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()} hidden>Add more pictures</button>}
                                 
                             </div>                            
                         </div>
