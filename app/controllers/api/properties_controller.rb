@@ -107,7 +107,9 @@ module Api
           end
         end
 
-        render 'api/properties/show', status: :ok
+        @property.save
+
+        render 'api/properties/updateImages', status: :ok
       end
 
       private

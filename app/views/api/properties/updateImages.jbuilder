@@ -1,4 +1,4 @@
-json.update do
+json.updateImages do
     json.property_id @property.id
     json.city @property.city
     json.id @property.id

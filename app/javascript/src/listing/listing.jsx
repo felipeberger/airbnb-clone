@@ -4,7 +4,7 @@ import Edit from './edit';
 import { handleErrors, safeCredentials, safeCredentialsForm } from '@utils/fetchHelper';
 import './listing.scss';
 
-export default function Listing () {
+export default function Listing (props) {
     const [authenticated, setAuthenticated] = useState(false)
     const [property, setProperty] = useState(null)
     const [update, setUpdate] = useState(null)
@@ -33,7 +33,7 @@ export default function Listing () {
 
     useEffect( ()=> {
         let picsObject = []
-        fetch(`/api/properties/${1}`)
+        fetch(`/api/properties/${props.data.property_id}`)
             .then(handleErrors)
             .then(data => {
                 setProperty(data.property);
@@ -45,7 +45,7 @@ export default function Listing () {
     const submitChange = ()=> {
         // TODO add validation to ensure that no empty key or value is passed to the API
         if (update) {
-            fetch(`/api/properties/${1}/update`, safeCredentials({
+            fetch(`/api/properties/${props.data.property_id}/update`, safeCredentials({
                 method: 'POST',
                 body: JSON.stringify({update})
     
@@ -109,17 +109,19 @@ export default function Listing () {
         let temp = []
         let removePics = []
         let src = e.target.src
+        const selected = 0.5
+        const clear = 1
 
         if (pictures) {
             temp = picturesArray.map(image => {
                 
-                if (image.opacity === 0.5 && src.includes(image.image_url)) {
-                    return {image_url: image.image_url, signed_id: image.signed_id, opacity: 1}
-                } else if (image.opacity === 0.5 || src.includes(image.image_url)) {
+                if (image.opacity === selected && src.includes(image.image_url)) {
+                    return {image_url: image.image_url, signed_id: image.signed_id, opacity: clear}
+                } else if (image.opacity === selected || src.includes(image.image_url)) {
                     removePics.push(image.signed_id)
-                    return {image_url: image.image_url, signed_id: image.signed_id, opacity: 0.5}
+                    return {image_url: image.image_url, signed_id: image.signed_id, opacity: selected}
                 } 
-                return {image_url: image.image_url, signed_id: image.signed_id, opacity: 1}
+                return {image_url: image.image_url, signed_id: image.signed_id, opacity: clear}
             })
     
             setPicturesArray(temp)
@@ -133,28 +135,28 @@ export default function Listing () {
             formData.append('image[]',uploadInput.current.files[i])
         }
         
-        fetch(`/api/properties/${1}/update`, safeCredentialsForm({
+        fetch(`/api/properties/${props.data.property_id}/update`, safeCredentialsForm({
             method: 'POST',
             body: formData
-            
         }))
         .then(handleErrors)
         .then(res => {
             console.log(res)
             mapImages(res.update)
+            uploadInput.current.value = "";
         })
     }
 
     const removeImage = () => {
         console.log(removePicturesArray)
-        fetch(`/api/properties/${1}/updateImages`, safeCredentialsForm({
+        fetch(`/api/properties/${props.data.property_id}/updateImages`, safeCredentialsForm({
             method: 'POST',
             body: removePicturesArray
         }))
         .then(handleErrors)
         .then(res => {
             console.log(res)
-            mapImages(res.property)
+            mapImages(res.updateImages)
             setRemovePicturesArray([])
         })
     }
@@ -202,7 +204,7 @@ export default function Listing () {
                             })}
                             <div className="col-4 align-self-center text-center">
                                 <input ref={uploadInput} className="" type="file" id="image-select" name="images" accept="image/*" multiple hidden/>
-                                {pictures? <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()} >Add more pictures</button> : <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()} hidden>Add more pictures</button>}
+                                {pictures? <button className="btn btn-secondary my-4" id="post-image" onClick={() => uploadInput.current.click()} >Add more pictures</button> : <button className="btn btn-secondary" id="post-image" onClick={() => uploadInput.current.click()} hidden>Add more pictures</button>}
                                 
                             </div>                            
                         </div>
