@@ -108,6 +108,7 @@ module Api
         end
 
         @property.save
+        @property.reload
 
         render 'api/properties/updateImages', status: :ok
       end
