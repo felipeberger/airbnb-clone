@@ -49,7 +49,7 @@ export default function ListingSnapshot (props) {
                     <button className="btn btn-danger my-2">Delete listing</button>
                 </div>
                 <div className={displayBookings? "pb-2 pt-3":"pb-2 pt-3 d-none"}>
-                    {bookings.length > 0? <h5 className="pb-2">Upcoming bookings:</h5>: <h5 className="pb-2">No bookings found for this property</h5>}
+                    {bookings.length > 0? <h5 className="pb-2">Upcoming bookings:</h5>: <h5 className="pb-2 pl-3">No bookings found for this property</h5>}
                     {bookings.map( booking => {
 
                         return (

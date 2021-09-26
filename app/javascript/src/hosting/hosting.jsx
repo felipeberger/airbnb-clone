@@ -28,8 +28,6 @@ export default function Hosting () {
 
     // TODO add a button after listings (or before, if it looks better) that lets users create a new listing. This avoids showing an empty page for people without listings
     
-    // TODO replace null on listings? so it shows a note saying that you don't have any listings
-
     return (
         <Layout isLoggedIn={authenticated}>
             <div className="container">
@@ -41,6 +39,9 @@ export default function Hosting () {
                         </div>
                     )
                 }):null}
+                <div className="text-center">
+                    <a href={"listing/"} role="button" className="btn btn-danger btn-lg mb-3 mt-2">Add New Listing</a>
+                </div>
             </div>
         </Layout>
     )
