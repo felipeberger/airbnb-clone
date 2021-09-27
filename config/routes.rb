@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get '/booking/:id/success' => 'static_pages#success'
   get '/hosting' => 'static_pages#hosting'
   get '/listing/:id' => 'static_pages#listing'
+  get '/new_listing' => 'static_pages#new_listing'
 
   namespace :api do
     # Add routes below this line

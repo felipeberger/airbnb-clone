@@ -55,7 +55,10 @@ class StaticPagesController < ApplicationController
     else 
       redirect_to '/login'
     end
+  end
 
+  def new_listing
+    render 'new_listing'
   end
 
 end
