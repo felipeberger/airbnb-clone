@@ -68,7 +68,7 @@ export default function NewListing () {
         .then(handleErrors)
         .then(res => {
             console.log(res)
-            uploadInput.current.value = "";
+            window.location = `/hosting`
         })
     }
 
