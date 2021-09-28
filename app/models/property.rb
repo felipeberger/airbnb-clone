@@ -14,5 +14,5 @@ class Property < ApplicationRecord
     validates :beds, presence: true, numericality: { only_integer: true, less_than: 20 }
     validates :baths, presence: true, numericality: { only_integer: true, less_than: 20 }
     validates :user, presence: true
-    validates :image_url, presence: true
+    
   end

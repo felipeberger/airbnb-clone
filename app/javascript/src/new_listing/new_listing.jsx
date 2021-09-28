@@ -7,6 +7,7 @@ export default function NewListing () {
    const [authenticated, setAuthenticated] = useState(false)
    const [userID, setUserID] = useState(null)
    const [update, setUpdate] = useState(null)
+   const [property, setProperty] = useState(null)
    const [title, setTitle] = useState(null)
    const [description, setDescription] = useState(null)
    const [city, setCity] = useState(null)
@@ -14,106 +15,118 @@ export default function NewListing () {
    const [maxGuests, setMaxGuests] = useState(null)
    const [propertyType, setPropertyType] = useState(null)
    const [pricePerNight, setPricePerNight] = useState(null)
-   const [bedrooms, setBedrooms] = useState(null)
+   const [bedrooms, setBedrooms] = useState(0)
    const [beds, setBeds] = useState(null)
    const [baths, setBaths] = useState(null)
    const uploadInput = useRef(null)
+   const [fieldsCompleted, setFieldsCompleted] = useState(false)
 
-   useEffect( () => {
+    useEffect( () => {
       fetch('/api/authenticated')
         .then(handleErrors)
         .then(data => {
           setAuthenticated(data.authenticated)
           setUserID(data.user_id)
         })
-      }, [])
+    }, [])
 
-   const submitProperty = ()=> {
-   // TODO add validation to ensure that no empty key or value is passed to the API
-   if (update) {
-         fetch(`/api/properties/new_property`, safeCredentials({
+    useEffect( () => {
+        
+        if (title && description && city && country && maxGuests && pricePerNight && propertyType && bedrooms && beds && baths) {
+            setFieldsCompleted(true)
+        }
+
+    }, [title, description, city, country, maxGuests, propertyType, pricePerNight, bedrooms, beds, baths])
+
+    const submitProperty = () => {
+        createPropertyObject()
+        if (update) {
+         fetch(`/api/properties/create`, safeCredentials({
             method: 'POST',
-            body: JSON.stringify({update})
+            body: JSON.stringify({property})
 
          }))
             .then(handleErrors)
             .then(res => {
                console.log(res)
                setUpdate(null);
-               // uploadImages(res.property.id)
+               uploadImages(res.property.id)
             })
-         }
-   }
+        }
+    }
 
-   const uploadImages = (property_id) => {
-      let formData = new FormData ();
-      for (let i = 0;i < uploadInput.current.files.length; i++) {
-          formData.append('image[]',uploadInput.current.files[i])
-      }
-      
-      fetch(`/api/properties/${property_id}/update`, safeCredentialsForm({
-          method: 'POST',
-          body: formData
-      }))
-      .then(handleErrors)
-      .then(res => {
-          console.log(res)
-          uploadInput.current.value = "";
-      })
-   }
+    const uploadImages = (property_id) => {
+        let formData = new FormData ();
+        for (let i = 0;i < uploadInput.current.files.length; i++) {
+            formData.append('image[]',uploadInput.current.files[i])
+        }
+        
+        fetch(`/api/properties/${property_id}/update`, safeCredentialsForm({
+            method: 'POST',
+            body: formData
+        }))
+        .then(handleErrors)
+        .then(res => {
+            console.log(res)
+            uploadInput.current.value = "";
+        })
+    }
 
-   const createPropertyObject = () => {
-      let property = {title: title, description: description, price_per_night: pricePerNight, max_guests: maxGuests, city: city, country: country, property_type: propertyType, bedrooms: bedrooms, beds: beds, baths: baths, home_image: ""}
-   }
+    const createPropertyObject = () => {
+        let property = {title: title, description: description, price_per_night: pricePerNight, max_guests: maxGuests, city: city, country: country, property_type: propertyType, bedrooms: bedrooms, beds: beds, baths: baths, image_url: ""}
 
-   const updateHandler = (e) => {
-      const key = e.target.id
-      const value = e.target.value
+        setUpdate(property)
+        setProperty(property)
+    }
 
-      switch (key) {
-         case "pictures":
-             setPictures(value)
-         break;
-         case "title":
-             setTitle(value)
-         break;
-         case "description":
-             setDescription(value)
-         break;
-         case "city":
-             setCity(value)
-         break;
-         case "country":
-             setCountry(value)
-         break;
-         case "max_guests":
-             setMaxGuests(value)
-         break;
-         case "price_per_night":
-             setPricePerNight(value)
-         break;
-         case "property_type":
-             setPropertyType(value)
-         break;
-         case "bedrooms":
-             setBedrooms(value)
-         break;
-         case "beds":
-             setBeds(value)
-         break;
-         case "baths":
-             setBaths(value)
-         break;
-         default:
-             return null;
-     }
-   }
+    const updateHandler = (e) => {
+        const key = e.target.id
+        const value = e.target.value
+
+        switch (key) {
+            case "pictures":
+                setPictures(value)
+            break;
+            case "title":
+                setTitle(value)
+            break;
+            case "description":
+                setDescription(value)
+            break;
+            case "city":
+                setCity(value)
+            break;
+            case "country":
+                setCountry(value)
+            break;
+            case "max_guests":
+                setMaxGuests(value)
+            break;
+            case "price_per_night":
+                setPricePerNight(value)
+            break;
+            case "property_type":
+                setPropertyType(value)
+            break;
+            case "bedrooms":
+                setBedrooms(value)
+            break;
+            case "beds":
+                setBeds(value)
+            break;
+            case "baths":
+                setBaths(value)
+            break;
+            default:
+                return null;
+        }
+    }
 
    return(
       <Layout isLoggedIn={authenticated}>
             <div className="container pb-4">
                <div className="pt-4 pb-2">
-                  <h2>Create New Listing</h2>
+                  <h2>New Listing</h2>
                   <hr />
                </div>
                <div className="">
@@ -134,7 +147,7 @@ export default function NewListing () {
                   <div className="d-inline-block">
                         <p className="">Title</p>
                   </div>
-                  <div className="form-group pr-5">
+                  <div className="form-group">
                         <input type="text" className="form-control" id="title" onChange={updateHandler} />
                   </div>
                   <hr />
@@ -142,7 +155,7 @@ export default function NewListing () {
                   <div className="d-inline-block">
                         <p className="">Description</p>
                   </div>
-                  <div className="form-group pr-5">
+                  <div className="form-group">
                         <textarea className="form-control" id="description" onChange={updateHandler} />
                   </div>
                   <hr />
@@ -150,7 +163,7 @@ export default function NewListing () {
                   <div className="d-inline-block">
                         <p className="">Price per night</p>
                   </div>
-                  <div className="form-group pr-5">
+                  <div className="form-group">
                         <input type="number" className="form-control" id="price_per_night" placeholder="$" onChange={updateHandler}/> 
                   </div>
                   <hr />
@@ -159,7 +172,8 @@ export default function NewListing () {
                         <p className="">Number of guests</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                     <select className="form-control pr-2" id="max_guests" onChange={updateHandler}>
+                     <select className="form-control" id="max_guests" onChange={updateHandler}>
+                            <option hidden>...</option>
                            <option>1</option>
                            <option>2</option>
                            <option>3</option>
@@ -177,7 +191,7 @@ export default function NewListing () {
                   <div className="d-inline-block">
                         <p className="">City</p>
                   </div>
-                  <div className="form-group pr-5">
+                  <div className="form-group">
                         <input type="text" className="form-control" id="city" onChange={updateHandler}/> 
                   </div>
                   <hr />
@@ -185,7 +199,7 @@ export default function NewListing () {
                   <div className="d-inline-block">
                         <p className="">Country</p>
                   </div>
-                  <div className="form-group pr-5">
+                  <div className="form-group">
                         <input type="text" className="form-control" id="country" onChange={updateHandler}/>
                   </div>
                   <hr />
@@ -198,7 +212,8 @@ export default function NewListing () {
                         <p className="">Property type</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                        <select className="form-control pr-2" id="property_type" onChange={updateHandler}>
+                        <select className="form-control" id="property_type" onChange={updateHandler}>
+                        <option hidden>...</option>
                         <option>studio</option>
                         <option>entire apartment</option>
                         <option>private room in apartment</option>
@@ -213,7 +228,8 @@ export default function NewListing () {
                         <p className="">Bedrooms</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                        <select className="form-control pr-2" id="bedrooms" onChange={updateHandler}>
+                        <select className="form-control" id="bedrooms" onChange={updateHandler}>
+                            <option hidden>...</option>
                            <option>0</option>
                            <option>1</option>
                            <option>2</option>
@@ -230,7 +246,8 @@ export default function NewListing () {
                         <p className="">Beds</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                        <select className="form-control pr-2" id="beds" onChange={updateHandler}>
+                        <select className="form-control" id="beds" onChange={updateHandler}>
+                            <option hidden>...</option>
                            <option>1</option>
                            <option>2</option>
                            <option>3</option>
@@ -246,7 +263,8 @@ export default function NewListing () {
                         <p className="">Bathrooms</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                        <select className="form-control pr-2" id="baths" onChange={updateHandler}>
+                        <select className="form-control" id="baths" onChange={updateHandler}>
+                            <option hidden>...</option>
                            <option>1</option>
                            <option>2</option>
                            <option>3</option>
@@ -261,7 +279,7 @@ export default function NewListing () {
                </div>
 
                <div className="text-center pt-3 pb-2">
-                  <button className="btn btn-danger btn-large" onClick={submitProperty}>Create New Listing</button>
+                   {fieldsCompleted? <button className="btn btn-danger btn-large" onClick={submitProperty}>Create New Listing</button> : <button className="btn btn-danger btn-large" onClick={submitProperty} disabled>Create New Listing</button>}
                </div>
 
             </div>

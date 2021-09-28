@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     get '/properties/:city/check' => 'properties#check_city'
     post '/properties/:id/update' => 'properties#update'
     post '/properties/:id/updateImages' => 'properties#updateImages'
+    post '/properties/create' => 'properties#create'
     
     # Bookings
     get '/properties/:id/bookings' => 'bookings#get_property_bookings'
