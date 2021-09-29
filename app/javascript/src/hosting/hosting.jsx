@@ -41,7 +41,7 @@ export default function Hosting () {
                     )
                 }):null}
                 <div className="text-center">
-                    <a href={"listing/"} role="button" className="btn btn-danger btn-lg mb-3 mt-2">Add New Listing</a>
+                    <a href="/new_listing" role="button" className="btn btn-danger btn-lg mb-3 mt-2">Add New Listing</a>
                 </div>
             </div>
         </Layout>

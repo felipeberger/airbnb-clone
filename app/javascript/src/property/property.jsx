@@ -3,12 +3,14 @@ import React, {useState, useEffect} from 'react';
 import Layout from '@src/layout';
 import BookingWidget from './bookingWidget';
 import { handleErrors } from '@utils/fetchHelper';
+import { Carousel } from 'react-carousel-minimal';
 import './property.scss';
 
 class Property extends React.Component {
   state = {
     property: {},
     loading: true,
+    picMap: []
   }
 
   componentDidMount() {
@@ -24,6 +26,7 @@ class Property extends React.Component {
 
   render () {
     const { property, loading } = this.state;
+
     if (loading) {
       return <p>loading...</p>;
     };
@@ -45,17 +48,63 @@ class Property extends React.Component {
       images,
     } = property
 
+    const picturesMap = () => {
+      let temp = images.map(pic => {
+        return (
+          {image: pic.image_url, caption: ""}
+        )
+      })
+
+      home_image? temp.unshift({image: home_image, caption: ""}) : null
+
+      return temp
+    } 
+      
+    const data = [
+      // home_image? {image: home_image, caption: "home"} : null,
+      picturesMap()
+    ]
+
+    const captionStyle = {
+      fontSize: '2em',
+      fontWeight: 'bold',
+    }
+
+    const slideNumberStyle = {
+      fontSize: '20px',
+      fontWeight: 'bold',
+    }
+
+    console.log(data)
+
     return (
       <Layout>
-        <div className="property-image mb-3" style={{ backgroundImage: `url(${home_image})` }} />
-        {/* <div className="property-image">
-          {images.map(image => {
-            return (
-              <img src={image.image_url} className="img-thumbnail img-fluid" key={image.image_url}/>
-            )
-          })}
-        </div> */}
         <div className="container">
+          <Carousel
+              data={picturesMap()}
+              time={2000}
+              width="1000px"
+              height="500px"
+              captionStyle={captionStyle}
+              radius="0px"
+              slideNumber={false}
+              slideNumberStyle={slideNumberStyle}
+              captionPosition="bottom"
+              automatic={false}
+              dots={true}
+              pauseIconColor="white"
+              pauseIconSize="40px"
+              slideBackgroundColor="darkgrey"
+              slideImageFit="cover"
+              thumbnails={false}
+              thumbnailWidth="150px"
+              style={{
+                textAlign: "center",
+                maxWidth: "1000px",
+                maxHeight: "500px",
+                margin: "30px auto",
+              }}
+            />
           <div className="row">
             <div className="info col-12 col-lg-7">
               <div className="mb-3">

@@ -1,8 +1,12 @@
 .property-image {
-   height: 250px;
-   background-size: cover;
-   background-position: center;
-   @media (min-width: 768px) {
-     height: 400px;
-   }
- }
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  @media (min-width: 768px) {
+    height: 400px;
+  }
+}
+
+.container {
+  min-height: 87vh;
+}
