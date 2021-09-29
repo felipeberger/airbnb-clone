@@ -22,7 +22,8 @@ export default function Hosting () {
         fetch(`api/users/${username}/properties`)
         .then(handleErrors)
         .then(data => {
-            setListings(data.user.properties)
+            // console.log(data)
+            setListings(data.user)
         })
     }, [username])
 

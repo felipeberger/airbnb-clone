@@ -1,9 +1,8 @@
 // property.jsx
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Layout from '@src/layout';
 import BookingWidget from './bookingWidget';
 import { handleErrors } from '@utils/fetchHelper';
-
 import './property.scss';
 
 class Property extends React.Component {
@@ -41,13 +40,21 @@ class Property extends React.Component {
       bedrooms,
       beds,
       baths,
-      image_url,
+      home_image,
       user,
+      images,
     } = property
 
     return (
       <Layout>
-        <div className="property-image mb-3" style={{ backgroundImage: `url(${image_url})` }} />
+        <div className="property-image mb-3" style={{ backgroundImage: `url(${home_image})` }} />
+        {/* <div className="property-image">
+          {images.map(image => {
+            return (
+              <img src={image.image_url} className="img-thumbnail img-fluid" key={image.image_url}/>
+            )
+          })}
+        </div> */}
         <div className="container">
           <div className="row">
             <div className="info col-12 col-lg-7">

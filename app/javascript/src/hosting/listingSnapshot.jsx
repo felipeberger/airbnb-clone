@@ -11,13 +11,13 @@ export default function ListingSnapshot (props) {
         fetch(`api/properties/${props.property.id}/bookings`)
         .then(handleErrors)
         .then(data => {
-            console.log(data)
             setBookings(data.bookings)
         })
     }, [])
     
     useEffect( ()=>{
         setProperty(props.property)
+        console.log(props.property)
     }, [] )
 
     const clickHandler = () => {
@@ -33,7 +33,7 @@ export default function ListingSnapshot (props) {
             <div className="row my-3 pt-2">
                 <div className="col-4 listing-preview pr-sm-1 pr-md-0">
                     <div key={props.key} className="card" style={{width: "14rem"}}>
-                        <img className="card-img-top" src={property.image_url? property.image_url:placeholderPic} alt="Property picture" />
+                        <img className="card-img-top" src={property.image_url? property.image_url:property.images[0].image_url} alt="Property picture" />
                         <div className="card-body text-center">
                             <button className="card-title btn btn-secondary btn-lg btn-block" onClick={clickHandler}>Upcoming Bookings</button>
                         </div>
