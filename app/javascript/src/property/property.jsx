@@ -3,7 +3,8 @@ import React, {useState, useEffect} from 'react';
 import Layout from '@src/layout';
 import BookingWidget from './bookingWidget';
 import { handleErrors } from '@utils/fetchHelper';
-import { Carousel } from 'react-carousel-minimal';
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import './property.scss';
 
 class Property extends React.Component {
@@ -51,61 +52,63 @@ class Property extends React.Component {
     const picturesMap = () => {
       let temp = images.map(pic => {
         return (
-          {image: pic.image_url, caption: ""}
+          <div key={pic.image_url} >
+            <img src={pic.image_url} alt="" />
+          </div>
         )
       })
 
-      home_image? temp.unshift({image: home_image, caption: ""}) : null
+      home_image? temp.unshift(
+        <div>
+          <img src={home_image} alt="" />
+        </div>
+      ) : null
 
       return temp
     } 
       
-    const data = [
-      // home_image? {image: home_image, caption: "home"} : null,
-      picturesMap()
-    ]
-
-    const captionStyle = {
-      fontSize: '2em',
-      fontWeight: 'bold',
-    }
-
-    const slideNumberStyle = {
-      fontSize: '20px',
-      fontWeight: 'bold',
-    }
-
-    console.log(data)
+    const responsive = {
+      desktop: {
+        breakpoint: { max: 3000, min: 1024 },
+        items: 1,
+        slidesToSlide: 1 // optional, default to 1.
+      },
+      tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 1,
+        slidesToSlide: 1 // optional, default to 1.
+      },
+      mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 1,
+        slidesToSlide: 1 // optional, default to 1.
+      }
+    };
 
     return (
       <Layout>
         <div className="container">
-          <Carousel
-              data={picturesMap()}
-              time={2000}
-              width="1000px"
-              height="500px"
-              captionStyle={captionStyle}
-              radius="0px"
-              slideNumber={false}
-              slideNumberStyle={slideNumberStyle}
-              captionPosition="bottom"
-              automatic={false}
-              dots={true}
-              pauseIconColor="white"
-              pauseIconSize="40px"
-              slideBackgroundColor="darkgrey"
-              slideImageFit="cover"
-              thumbnails={false}
-              thumbnailWidth="150px"
-              style={{
-                textAlign: "center",
-                maxWidth: "1000px",
-                maxHeight: "500px",
-                margin: "30px auto",
-              }}
-            />
-          <div className="row">
+        <Carousel
+          swipeable={false}
+          draggable={false}
+          showDots={true}
+          responsive={responsive}
+          ssr={false} // means to render carousel on server-side.
+          infinite={true}
+          autoPlay={false}
+          autoPlaySpeed={1000}
+          keyBoardControl={true}
+          customTransition="all .5"
+          transitionDuration={500}
+          containerClass="carousel-container pt-3"
+          removeArrowOnDeviceType={["tablet", "mobile"]}
+          deviceType={this.props.deviceType}
+          dotListClass="custom-dot-list-style"
+          itemClass="carousel-item-padding-40-px"
+        >
+          {picturesMap()}
+        </Carousel>
+          <div className="row pt-3">
             <div className="info col-12 col-lg-7">
               <div className="mb-3">
                 <h3 className="mb-0">{title}</h3>
