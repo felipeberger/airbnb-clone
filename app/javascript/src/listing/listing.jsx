@@ -60,6 +60,10 @@ export default function Listing (props) {
     const updateHandler = (e) => {
         const key = e.target.id
         const value = e.target.value
+        if (key === "city" || key === "country") {
+            value = value.toLowerCase()
+        }
+
         setUpdate({[key] : value})
     }
     

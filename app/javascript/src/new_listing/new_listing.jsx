@@ -94,10 +94,10 @@ export default function NewListing () {
                 setDescription(value)
             break;
             case "city":
-                setCity(value)
+                setCity(value.toLowerCase())
             break;
             case "country":
-                setCountry(value)
+                setCountry(value.toLowerCase())
             break;
             case "max_guests":
                 setMaxGuests(value)
