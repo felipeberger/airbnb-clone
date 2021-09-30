@@ -8,4 +8,9 @@ json.bookings do
     json.image_url @bookingProperty.image_url
     json.start_date @booking.start_date
     json.end_date @booking.end_date
+    json.images do 
+        json.array! @bookingProperty.images do |image| 
+            json.image_url url_for(image)
+        end
+    end
 end

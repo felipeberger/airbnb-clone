@@ -23,39 +23,44 @@ export default function Success (props) {
           .then(data => {
             setBooking(data.bookings)
             setLoaded(true)
+            console.log(data.bookings)
           })
     }, [loaded])
 
-    return (
-        <Layout isLoggedIn={authenticated}>
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-3"></div>
-                    <div className="col-8">
-                        <div className="py-4">
-                            <h1 className="text-danger">Booking Completed</h1>
-                            <p>Congratulations! Your booking has been completed successfully.</p>
-                        </div>
-                        <div className="py-3">
-                            <img src={booking? booking.image_url:null} alt="" />
-                            <h5 className="pt-1">{booking? booking.title:null}</h5>
-                            <p>{booking? booking.property_type:null}</p>
-                        </div>
-                        <div className="row py-3">
-                            <div className="col-6">
-                                <p>Check-in</p>
-                                <p><b>{booking? booking.start_date:null}</b></p>
+    if (loaded) {
+        return (
+            <Layout isLoggedIn={authenticated}>
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-3"></div>
+                        <div className="col-5">
+                            <div className="py-4">
+                                <h1 className="text-danger">Booking Completed</h1>
+                                <p>Congratulations! Your booking has been completed successfully.</p>
                             </div>
-                            <div className="col-6">
-                                <p>Check-out</p>
-                                <p><b>{booking? booking.end_date:null}</b></p>
+                            <div className="py-3">
+                                <img src={booking.image_url? booking.image_url:booking.images[0].image_url} alt="" className="pb-3"/>
+                                <h5 className="pt-1">{booking.title}</h5>
+                                <p>{booking.property_type}</p>
                             </div>
+                            <div className="row py-3">
+                                <div className="col-6">
+                                    <p>Check-in</p>
+                                    <p><b>{booking.start_date}</b></p>
+                                </div>
+                                <div className="col-6">
+                                    <p>Check-out</p>
+                                    <p><b>{booking.end_date}</b></p>
+                                </div>
+                            </div>
+                            <a href="/trips" role="button" className="btn btn-danger my-3">View Your Trips</a>
                         </div>
-                        <a href="/trips" role="button" className="btn btn-danger my-3">View Your Trips</a>
+                        <div className="col-4"></div>
                     </div>
-                    <div className="col-1"></div>
                 </div>
-            </div>
-        </Layout>
-    )
+            </Layout>
+        )
+    } else {
+        return null
+    }
 }
