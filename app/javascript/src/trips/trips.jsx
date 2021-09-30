@@ -45,6 +45,7 @@ export default function Trips () {
                 .then(handleErrors)
                 .then(data => {
                     setProperties(data.propertiesById)
+                    console.log(data.propertiesById)
                 })
         }
     }, [bookings])
@@ -80,7 +81,10 @@ export default function Trips () {
     const bookingBuilder = (i, bookingsArray) => {
         bookingsArray.push(
             <div key={bookings[i].id} className="card mx-3 my-2" style={{width: "16rem"}}>
-                    <img className="card-img-top" src={properties[i].image_url} alt="Property picture" /> 
+                    {properties[i].home_image? 
+                    <img className="card-img-top" src={properties[i].home_image} alt="Property picture" /> :
+                    <img className="card-img-top" src={properties[i].images[0].image_url} alt="Property picture" /> }
+                    {/* <img className="card-img-top" src={properties[i].images} alt="Property picture" />  */}
                     <div className="card-body">
                         <h5 className="card-title"> <b>{properties[i].title}</b> </h5>
                         <p className="card-text">{properties[i].city}</p>
@@ -114,11 +118,10 @@ return (
                 </div>
                 <hr />
             </div>
-            <div>
+            <div className="pb-3">
                 <a href="/" className="btn btn-danger btn-lg" role="button" >Explore AirBnB</a>
             </div>
         </div>
-        <hr />
         </Layout> 
     )
 }
