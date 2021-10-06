@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import LoginWidget from './login/loginWidget';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { handleErrors } from '@utils/fetchHelper';
 
 const loggedIn = () => {
   return (
@@ -14,7 +15,7 @@ const loggedIn = () => {
     <a className="dropdown-item" href="">Host an Experience</a>
     <div className="dropdown-divider"></div>
     <a className="dropdown-item" href="">Help</a>
-    <a className="dropdown-item" href="">Log Out</a>
+    <a className="dropdown-item" onClick={logout}>Log Out</a>
     </>
   )
 }
@@ -22,14 +23,23 @@ const loggedIn = () => {
 const notLoggedIn = () => {
   return (
     <>
-    <a className="dropdown-item" id="log-in" href="/login" >Log In</a>
-    <a className="dropdown-item" id="sign-up" href="">Sign Up</a>
+    <a className="dropdown-item" id="log-in" href="/login" >Log In / Sign up</a>
     <div className="dropdown-divider"></div>
     <a className="dropdown-item" href="">Host Your Home</a>
     <a className="dropdown-item" href="">Host an Experience</a>
     <a className="dropdown-item" href="">Help</a>
     </>
   )
+}
+
+const logout = () => {
+  fetch('/api/sessions/destroy')
+  .then(handleErrors)
+  .then((data) => {
+    if (data.success) {
+      location.reload();
+    }
+  })
 }
 
 const Layout = (props) => {
