@@ -7,14 +7,14 @@ import { handleErrors } from '@utils/fetchHelper';
 const loggedIn = () => {
   return (
     <>
-    <a className="dropdown-item" href="">Messages</a>
-    <a className="dropdown-item" href="">Notifications</a>
+    <a className="dropdown-item disabled" href="">Messages</a>
+    <a className="dropdown-item disabled" href="">Notifications</a>
     <a className="dropdown-item" href="/trips">Trips</a>
     <div className="dropdown-divider"></div>
     <a className="dropdown-item" href="/hosting">Manage Listings</a>
-    <a className="dropdown-item" href="">Host an Experience</a>
+    <a className="dropdown-item disabled" href="">Host an Experience</a>
     <div className="dropdown-divider"></div>
-    <a className="dropdown-item" href="">Help</a>
+    <a className="dropdown-item disabled" >Help</a>
     <a className="dropdown-item" onClick={logout}>Log Out</a>
     </>
   )
@@ -25,9 +25,9 @@ const notLoggedIn = () => {
     <>
     <a className="dropdown-item" id="log-in" href="/login" >Log In / Sign up</a>
     <div className="dropdown-divider"></div>
-    <a className="dropdown-item" href="">Host Your Home</a>
-    <a className="dropdown-item" href="">Host an Experience</a>
-    <a className="dropdown-item" href="">Help</a>
+    <a className="dropdown-item disabled" href="">Host Your Home</a>
+    <a className="dropdown-item disabled" href="">Host an Experience</a>
+    <a className="dropdown-item disabled" >Help</a>
     </>
   )
 }

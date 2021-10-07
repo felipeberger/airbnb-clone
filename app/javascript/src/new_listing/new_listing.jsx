@@ -20,6 +20,7 @@ export default function NewListing () {
    const [baths, setBaths] = useState(null)
    const uploadInput = useRef(null)
    const [fieldsCompleted, setFieldsCompleted] = useState(false)
+   const [uploading, setUploading] = useState(false)
 
     useEffect( () => {
       fetch('/api/authenticated')
@@ -38,8 +39,12 @@ export default function NewListing () {
 
     }, [title, description, city, country, maxGuests, propertyType, pricePerNight, bedrooms, beds, baths])
 
+    useEffect(()=>{
+        if (update) submitProperty()
+    }, [update])
+
     const submitProperty = () => {
-        createPropertyObject()
+        setUploading(true)
         if (update) {
          fetch(`/api/properties/create`, safeCredentials({
             method: 'POST',
@@ -82,6 +87,7 @@ export default function NewListing () {
     const updateHandler = (e) => {
         const key = e.target.id
         const value = e.target.value
+        console.log(key, " : " , value )
 
         switch (key) {
             case "pictures":
@@ -136,7 +142,8 @@ export default function NewListing () {
                   <div className="row">
                         <div className="col-4 align-self-center">
                            <input ref={uploadInput} className="" type="file" id="image-select" name="images" accept="image/*" multiple hidden/>
-                           <button className="btn btn-secondary my-4" id="post-image" onClick={() => uploadInput.current.click()} >Add pictures</button>                             
+                           
+                           {uploading? <button className="btn btn-secondary my-4" id="post-image" onClick={() => uploadInput.current.click()} disabled >Add pictures</button> : <button className="btn btn-secondary my-4" id="post-image" onClick={() => uploadInput.current.click()} >Add pictures</button> }
                         </div>                            
                   </div>
                   <hr />
@@ -148,7 +155,7 @@ export default function NewListing () {
                         <p className="">Title</p>
                   </div>
                   <div className="form-group">
-                        <input type="text" className="form-control" id="title" onChange={updateHandler} />
+                        {uploading? <input type="text" className="form-control" id="title" onChange={updateHandler} disabled/> : <input type="text" className="form-control" id="title" onChange={updateHandler} />}
                   </div>
                   <hr />
 
@@ -156,7 +163,7 @@ export default function NewListing () {
                         <p className="">Description</p>
                   </div>
                   <div className="form-group">
-                        <textarea className="form-control" id="description" onChange={updateHandler} />
+                        {uploading? <textarea className="form-control" id="description" onChange={updateHandler} disabled/> : <textarea className="form-control" id="description" onChange={updateHandler} />}
                   </div>
                   <hr />
 
@@ -164,7 +171,7 @@ export default function NewListing () {
                         <p className="">Price per night</p>
                   </div>
                   <div className="form-group">
-                        <input type="number" className="form-control" id="price_per_night" placeholder="$" onChange={updateHandler}/> 
+                        {uploading? <input type="number" className="form-control" id="price_per_night" placeholder="$" onChange={updateHandler} disabled/> : <input type="number" className="form-control" id="price_per_night" placeholder="$" onChange={updateHandler}/> }
                   </div>
                   <hr />
 
@@ -172,16 +179,16 @@ export default function NewListing () {
                         <p className="">Number of guests</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                     <select className="form-control" id="max_guests" onChange={updateHandler}>
+                        {uploading? <select className="form-control" id="max_guests" onChange={updateHandler} disabled><option hidden>...</option></select> : <select className="form-control" id="max_guests" onChange={updateHandler}> 
                             <option hidden>...</option>
-                           <option>1</option>
-                           <option>2</option>
-                           <option>3</option>
-                           <option>4</option>
-                           <option>5</option>
-                           <option>6</option>
-                           <option>7+</option>
-                        </select>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7+</option>
+                        </select>}
                   </div>
                </div>
                <hr />
@@ -192,7 +199,7 @@ export default function NewListing () {
                         <p className="">City</p>
                   </div>
                   <div className="form-group">
-                        <input type="text" className="form-control" id="city" onChange={updateHandler}/> 
+                        {uploading? <input type="text" className="form-control" id="city" onChange={updateHandler} disabled/> : <input type="text" className="form-control" id="city" onChange={updateHandler}/> }
                   </div>
                   <hr />
 
@@ -200,7 +207,7 @@ export default function NewListing () {
                         <p className="">Country</p>
                   </div>
                   <div className="form-group">
-                        <input type="text" className="form-control" id="country" onChange={updateHandler}/>
+                        {uploading? <input type="text" className="form-control" id="country" onChange={updateHandler} disabled/> : <input type="text" className="form-control" id="country" onChange={updateHandler}/>}
                   </div>
                   <hr />
                </div>
@@ -212,15 +219,15 @@ export default function NewListing () {
                         <p className="">Property type</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                        <select className="form-control" id="property_type" onChange={updateHandler}>
-                        <option hidden>...</option>
-                        <option>studio</option>
-                        <option>entire apartment</option>
-                        <option>private room in apartment</option>
-                        <option>room in hotel</option>
-                        <option>entire house</option>
-                        <option>entire condominium</option>
-                     </select>
+                        {uploading? <select className="form-control" id="property_type" onChange={updateHandler} disabled><option hidden>...</option></select> : <select className="form-control" id="property_type" onChange={updateHandler}>
+                            <option hidden>...</option>
+                            <option>studio</option>
+                            <option>entire apartment</option>
+                            <option>private room in apartment</option>
+                            <option>room in hotel</option>
+                            <option>entire house</option>
+                            <option>entire condominium</option>
+                        </select>}
                   </div>
                   <hr />
 
@@ -228,7 +235,7 @@ export default function NewListing () {
                         <p className="">Bedrooms</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                        <select className="form-control" id="bedrooms" onChange={updateHandler}>
+                        {uploading? <select className="form-control" id="bedrooms" onChange={updateHandler} disabled><option hidden>...</option></select>:<select className="form-control" id="bedrooms" onChange={updateHandler}>
                             <option hidden>...</option>
                            <option>0</option>
                            <option>1</option>
@@ -238,7 +245,7 @@ export default function NewListing () {
                            <option>5</option>
                            <option>6</option>
                            <option>7+</option>
-                        </select>
+                        </select>}
                   </div>
                   <hr />
 
@@ -246,7 +253,7 @@ export default function NewListing () {
                         <p className="">Beds</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                        <select className="form-control" id="beds" onChange={updateHandler}>
+                        {uploading? <select className="form-control" id="beds" onChange={updateHandler} disabled><option hidden>...</option></select> :<select className="form-control" id="beds" onChange={updateHandler}>
                             <option hidden>...</option>
                            <option>1</option>
                            <option>2</option>
@@ -255,7 +262,7 @@ export default function NewListing () {
                            <option>5</option>
                            <option>6</option>
                            <option>7+</option>
-                        </select>
+                        </select>}
                   </div>
                   <hr />
 
@@ -263,7 +270,7 @@ export default function NewListing () {
                         <p className="">Bathrooms</p>
                   </div>
                   <div className="form-group d-inline-block float-right">
-                        <select className="form-control" id="baths" onChange={updateHandler}>
+                        {uploading? <select className="form-control" id="baths" onChange={updateHandler} disabled><option hidden>...</option></select> :<select className="form-control" id="baths" onChange={updateHandler}>
                             <option hidden>...</option>
                            <option>1</option>
                            <option>2</option>
@@ -272,14 +279,14 @@ export default function NewListing () {
                            <option>5</option>
                            <option>6</option>
                            <option>7+</option>
-                        </select>
+                        </select>}
                   </div>
                   <hr />
 
                </div>
 
                <div className="text-center pt-3 pb-2">
-                   {fieldsCompleted? <button className="btn btn-danger btn-large" onClick={submitProperty}>Create New Listing</button> : <button className="btn btn-danger btn-large" onClick={submitProperty} disabled>Create New Listing</button>}
+                   {fieldsCompleted && !uploading? <button className="btn btn-danger btn-large" onClick={createPropertyObject}>Create New Listing</button> : <button className="btn btn-danger btn-large" onClick={createPropertyObject} disabled>Create New Listing</button>}
                </div>
 
             </div>

@@ -15,7 +15,7 @@ module Api
       end
 
       def get_properties_by_location
-        @city = params[:city]
+        @city = params[:city].downcase
         startDate = params[:start_date] == "null"? Date.today : Date.parse(params[:start_date])
         endDate = params[:end_date] == "null"? Date.today.next_year(2) : Date.parse(params[:end_date])
         matchingIds = []
@@ -40,7 +40,7 @@ module Api
       end
 
       def check_city
-        city = params[:city]
+        city = params[:city].downcase
         cityHasProperties = Property.find_by(city: city)
         return render json: { error: 'No properties found in that location'}, status: :not_found if !cityHasProperties
 
