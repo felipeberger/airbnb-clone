@@ -1,5 +1,5 @@
 // property.jsx
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import Layout from '@src/layout';
 import BookingWidget from './bookingWidget';
 import { handleErrors } from '@utils/fetchHelper';
@@ -11,9 +11,10 @@ class Property extends React.Component {
   state = {
     property: {},
     loading: true,
-    picMap: []
-  }
-
+    picMap: [],
+    authenticated: false
+  } 
+  
   componentDidMount() {
     fetch(`/api/properties/${this.props.property_id}`)
       .then(handleErrors)
@@ -23,10 +24,18 @@ class Property extends React.Component {
           loading: false,
         })
       })
+
+    fetch('/api/authenticated')
+      .then(handleErrors)
+      .then(data => {
+        this.setState({
+          authenticated: data.authenticated
+        })
+      })
   }
 
   render () {
-    const { property, loading } = this.state;
+    const { property, loading, authenticated } = this.state;
 
     if (loading) {
       return <p>loading...</p>;
@@ -59,7 +68,7 @@ class Property extends React.Component {
       })
 
       home_image? temp.unshift(
-        <div>
+        <div key={0}>
           <img src={home_image} alt="" />
         </div>
       ) : null
@@ -86,7 +95,7 @@ class Property extends React.Component {
     };
 
     return (
-      <Layout>
+      <Layout isLoggedIn={authenticated}>
         <div className="container">
         <Carousel
           swipeable={false}
