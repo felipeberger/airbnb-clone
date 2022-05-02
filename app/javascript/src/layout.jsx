@@ -68,7 +68,11 @@ const Layout = (props) => {
         </div>
 
       </nav>
-      {props.children}
+      <div
+        style={{minHeight: `${Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) - 112}px`}}
+      >
+        {props.children}
+      </div>
       <footer className="p-3 bg-light">
         <div>
           <p className="mr-3 mb-0 text-secondary">Airbnb Clone</p>
