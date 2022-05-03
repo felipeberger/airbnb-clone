@@ -65,7 +65,10 @@ export default function Landing () {
 
     return (
         <Layout isLoggedIn={authenticated}>
-            <div className="background">
+            <div 
+                className="background"
+                style={{minHeight: `${Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0) - 112}px`}}    
+            >
                 <div className="container-fluid">
                 <div className="row d-flex justify-content-center">
                     <div className="col-8 mt-5">
